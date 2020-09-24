@@ -1,5 +1,6 @@
 #include <iostream>
-#include "io.hh"
+
+#include "../src/io.hh"
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {

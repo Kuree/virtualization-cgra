@@ -131,6 +131,8 @@ std::vector<Edge *> Graph::partition(uint32_t max_partition_size) {
 
     (void)cut_eave_numbers;
 
+    // https://epubs.siam.org/doi/pdf/10.1137/S009753979427087X
+
     return {};
 }
 
