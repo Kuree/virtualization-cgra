@@ -26,7 +26,7 @@ public:
           const std::map<std::string, uint32_t> &track_mode);
 
     // partition
-    std::vector<Edge*> partition(uint32_t num_of_partition);
+    std::vector<Edge *> partition(uint32_t max_partition_size);
 
 private:
     // memory storage
@@ -65,5 +65,9 @@ struct Port {
 
     Vertex *vertex = nullptr;
 };
+
+// compute the partition size
+std::vector<std::pair<uint32_t, int>> compute_cut_groups(const std::map<int, uint64_t> &edge_sizes,
+                                                         int partition_size);
 
 #endif  // VIRTUALIZATION_GRAPH_HH
