@@ -15,6 +15,8 @@ class Netlist {
 public:
     explicit Netlist(std::shared_ptr<Graph> graph) : graph_(std::move(graph)) {}
 
+    [[nodiscard]] Graph *graph() const { return graph_.get(); }
+
 private:
     std::shared_ptr<Graph> graph_;
 };

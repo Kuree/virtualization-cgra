@@ -56,6 +56,7 @@ Port *Graph::get_port(const std::pair<std::string, std::string> &name,
         port->name = name.second;
         port->vertex = vertex;
         vertex->ports.emplace(port->name, port);
+        port_to_ptr.emplace(name, port);
     }
     return port_to_ptr.at(name);
 }

@@ -1,0 +1,151 @@
+Netlists:
+e1: (p59, alu_res)	(p0, data1)
+e2: (p0, alu_res)	(p1, data0)
+e3: (p60, alu_res)	(p1, data1)
+e4: (p1, alu_res)	(p2, data0)
+e5: (p61, alu_res)	(p2, data1)
+e6: (p2, alu_res)	(p3, data0)
+e7: (p62, alu_res)	(p3, data1)
+e8: (p3, alu_res)	(p4, data0)
+e9: (p63, alu_res)	(p4, data1)
+e10: (p4, alu_res)	(p5, data0)
+e11: (p64, alu_res)	(p5, data1)
+e12: (p5, alu_res)	(p6, data0)
+e13: (p65, alu_res)	(p6, data1)
+e14: (p6, alu_res)	(p7, data0)
+e15: (p66, alu_res)	(p7, data1)
+e16: (p7, alu_res)	(p8, data0)
+e17: (p67, alu_res)	(p8, data1)
+e27: (I20, io2f_16)	(p67, data1)	(r68, reg)	(m58, data_in_0)
+e28: (r68, reg)	(p66, data1)	(p65, data1)
+e30: (m58, data_out_0)	(p61, data1)	(r72, reg)
+e31: (r70, reg)	(p63, data1)	(p62, data1)
+e33: (m58, data_out_1)	(p64, data1)	(r70, reg)
+e34: (r72, reg)	(p60, data1)	(p59, data1)
+e36: (i22, io2f_1)	(m58, flush)	(m42, flush)
+e38: (p43, alu_res)	(p23, data1)
+e39: (p23, alu_res)	(p24, data0)
+e40: (p44, alu_res)	(p24, data1)
+e41: (p24, alu_res)	(p25, data0)
+e42: (p45, alu_res)	(p25, data1)
+e43: (p25, alu_res)	(p26, data0)
+e44: (p46, alu_res)	(p26, data1)
+e45: (p26, alu_res)	(p27, data0)
+e46: (p47, alu_res)	(p27, data1)
+e47: (p27, alu_res)	(p28, data0)
+e48: (p48, alu_res)	(p28, data1)
+e49: (p28, alu_res)	(p29, data0)
+e50: (p49, alu_res)	(p29, data1)
+e51: (p29, alu_res)	(p30, data0)
+e52: (p50, alu_res)	(p30, data1)
+e53: (p30, alu_res)	(p31, data0)
+e54: (p51, alu_res)	(p31, data1)
+e55: (p31, alu_res)	(I19, f2io_16)
+e65: (p8, alu_res)	(p51, data1)	(r52, reg)	(m42, data_in_0)
+e66: (r52, reg)	(p50, data1)	(p49, data1)
+e68: (m42, data_out_0)	(p45, data1)	(r56, reg)
+e69: (r54, reg)	(p47, data1)	(p46, data1)
+e71: (m42, data_out_1)	(p48, data1)	(r54, reg)
+e72: (r56, reg)	(p44, data1)	(p43, data1)
+e74: (m42, stencil_valid)	(i21, f2io_1)
+
+ID to Names:
+p0: add_307_311_312$binop
+p1: add_313_317_318$binop
+p2: add_319_323_324$binop
+p3: add_325_329_330$binop
+p4: add_331_335_336$binop
+p5: add_337_341_342$binop
+p6: add_343_347_348$binop
+p7: add_349_353_354$binop
+p8: add_355_359_360$binop
+I19: io16_out_0_0
+I20: io16in_in_arg_0_0_0
+i21: io1_valid
+i22: io1in_reset
+p23: k2_add_307_311_312$binop
+p24: k2_add_313_317_318$binop
+p25: k2_add_319_323_324$binop
+p26: k2_add_325_329_330$binop
+p27: k2_add_331_335_336$binop
+p28: k2_add_337_341_342$binop
+p29: k2_add_343_347_348$binop
+p30: k2_add_349_353_354$binop
+p31: k2_add_355_359_360$binop
+m42: k2_lakemem
+p43: k2_mul_308_310_311$binop
+p44: k2_mul_314_316_317$binop
+p45: k2_mul_320_322_323$binop
+p46: k2_mul_326_328_329$binop
+p47: k2_mul_332_334_335$binop
+p48: k2_mul_338_340_341$binop
+p49: k2_mul_344_346_347$binop
+p50: k2_mul_350_352_353$binop
+p51: k2_mul_356_358_359$binop
+r52: k2_reg_0_1
+r54: k2_reg_1_1
+r56: k2_reg_2_1
+m58: lakemem
+p59: mul_308_310_311$binop
+p60: mul_314_316_317$binop
+p61: mul_320_322_323$binop
+p62: mul_326_328_329$binop
+p63: mul_332_334_335$binop
+p64: mul_338_340_341$binop
+p65: mul_344_346_347$binop
+p66: mul_350_352_353$binop
+p67: mul_356_358_359$binop
+r68: reg_0_1
+r70: reg_1_1
+r72: reg_2_1
+
+Netlist Bus:
+e1: 16
+e2: 16
+e3: 16
+e4: 16
+e5: 16
+e6: 16
+e7: 16
+e8: 16
+e9: 16
+e10: 16
+e11: 16
+e12: 16
+e13: 16
+e14: 16
+e15: 16
+e16: 16
+e17: 16
+e27: 16
+e28: 16
+e30: 16
+e31: 16
+e33: 16
+e34: 16
+e36: 1
+e38: 16
+e39: 16
+e40: 16
+e41: 16
+e42: 16
+e43: 16
+e44: 16
+e45: 16
+e46: 16
+e47: 16
+e48: 16
+e49: 16
+e50: 16
+e51: 16
+e52: 16
+e53: 16
+e54: 16
+e55: 16
+e65: 16
+e66: 16
+e68: 16
+e69: 16
+e71: 16
+e72: 16
+e74: 1
