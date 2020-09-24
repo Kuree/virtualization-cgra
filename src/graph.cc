@@ -110,6 +110,53 @@ void Graph::compute_data_wave() {
     }
 }
 
+class Partition {
+public:
+    void add_vertex(Vertex *vertex) {
+        vertices_.emplace(vertex);
+        // compute if it removes a boundary vertices
+        std::unordered_set<const Vertex *> vertex_to_remove;
+        for (auto const *v : boundary_vertices_) {
+            bool remove = true;
+            for (auto const *e : v->edges_to) {
+                auto const *e_v = e->to->vertex;
+                if (vertices_.find(e_v) != vertices_.end()) {
+                    remove = false;
+                    break;
+                }
+            }
+            if (remove) {
+                vertex_to_remove.emplace(v);
+            }
+        }
+        for (auto const *v : vertex_to_remove) boundary_vertices_.erase(v);
+
+        // compute if it is boundary vertices
+        bool is_boundary = false;
+        for (auto const *e : vertex->edges_to) {
+            auto *e_v = e->to->vertex;
+            if (vertices_.find(e_v) == vertices_.end()) {
+                is_boundary = true;
+                break;
+            }
+        }
+        if (is_boundary) {
+            boundary_vertices_.emplace(vertex);
+        }
+    }
+
+    [[nodiscard]] uint64_t num_boundary_vertices() const { return boundary_vertices_.size(); }
+
+    // default ctor
+    Partition() = default;
+    // copy ctor
+    Partition(const Partition &partition) = default;
+
+private:
+    std::unordered_set<const Vertex *> vertices_;
+    std::unordered_set<const Vertex *> boundary_vertices_;
+};
+
 std::vector<Edge *> Graph::partition(uint32_t max_partition_size) {
     // for PnR's purpose, given a max size, usually can do a good job around 80%-90% usage
     // we use 0.8 here just to do a approximation
@@ -130,8 +177,6 @@ std::vector<Edge *> Graph::partition(uint32_t max_partition_size) {
     auto cut_eave_numbers = compute_cut_groups(edge_sizes, partition_size);
 
     (void)cut_eave_numbers;
-
-    // https://epubs.siam.org/doi/pdf/10.1137/S009753979427087X
 
     return {};
 }
