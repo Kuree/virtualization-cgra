@@ -11,9 +11,6 @@ using std::runtime_error;
 using std::string;
 using std::vector;
 
-const ::string BEGIN = "BEGIN";
-const ::string END = "END";
-
 // trim function copied from https://stackoverflow.com/a/217605
 // trim from start (in place)
 static inline void ltrim(std::string &s) {
@@ -122,5 +119,6 @@ std::unique_ptr<Netlist> load_netlist(const std::string &filename) {
     if (netlist.size() != track_mode.size()) {
         throw ::runtime_error("netlist size doesn't match with netlist bus");
     }
-    return std::make_unique<Netlist>(netlist, track_mode);
+    auto graph = std::make_shared<Graph>(netlist, track_mode);
+    return std::make_unique<Netlist>(graph);
 }

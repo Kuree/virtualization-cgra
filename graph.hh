@@ -61,7 +61,6 @@ struct Vertex {
 };
 
 struct Port {
-    uint32_t bit_width;
     std::string name;
 
     Vertex *vertex = nullptr;

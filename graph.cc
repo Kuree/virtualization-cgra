@@ -1,5 +1,6 @@
 #include "graph.hh"
 
+#include <unordered_map>
 #include <unordered_set>
 
 Graph::Graph(const std::map<std::string, std::vector<std::pair<std::string, std::string>>> &netlist,
@@ -58,23 +59,31 @@ Port *Graph::get_port(const std::pair<std::string, std::string> &name,
     return port_to_ptr.at(name);
 }
 
-void label_edge_data_wave(Vertex *vertex, int wave_number) {
+void label_edge_data_wave(Vertex *vertex, uint32_t wave_number,
+                          std::unordered_set<Vertex *> &visited) {
     const static std::unordered_set<char> timed_vertex = {'r', 'm'};
     auto blk_type = vertex->name[0];
     uint32_t next_wave_number = wave_number;
     if (timed_vertex.find(blk_type) != timed_vertex.end()) next_wave_number++;
+    // visited is used for loops
+    visited.emplace(vertex);
+
     for (auto const &edge : vertex->edges_to) {
         edge->valid = true;
         if (next_wave_number > edge->wave_number) edge->wave_number = next_wave_number;
         auto v = edge->to->vertex;
+        // prevent loop
+        if (visited.find(v) != visited.end()) continue;
         // recursive call
-        label_edge_data_wave(v, next_wave_number);
+        label_edge_data_wave(v, next_wave_number, visited);
     }
 }
 
 void Graph::compute_data_wave() {
     // we hardcoded some coded some blk types here
     const static std::unordered_set<char> io_vertex = {'i', 'I'};
+
+    std::unordered_set<Vertex *> visited;
 
     // start searching from the vertices
     // notice that all the inputs
@@ -85,7 +94,7 @@ void Graph::compute_data_wave() {
 
         // need to recursively label the wave
         // any edges start from IO is 0
-        label_edge_data_wave(v.get(), 0);
+        label_edge_data_wave(v.get(), 0, visited);
     }
 
     // sanity check
@@ -93,4 +102,19 @@ void Graph::compute_data_wave() {
         if (!edge->valid)
             throw std::runtime_error("Invalid edge " + edge->from->name + " -> " + edge->to->name);
     }
+}
+
+std::vector<Edge *> Graph::partition(uint32_t num_of_partition) {
+    auto num_nodes = vertices_.size();
+    auto approximate_size = num_nodes / num_of_partition;
+    (void)approximate_size;
+
+    // we use modified Karger's algorithm that preserves the data wave
+    // first we index the edge by its wave number
+    std::unordered_map<int, std::unordered_set<Edge *>> wave_edge_map;
+    for (auto const &edge : edges_) {
+        wave_edge_map[edge->wave_number].emplace(edge.get());
+    }
+
+    return {};
 }
