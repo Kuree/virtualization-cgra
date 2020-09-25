@@ -30,6 +30,10 @@ public:
     // partition
     std::vector<Edge *> partition(uint32_t max_partition_size);
 
+    // these two functions are expensive, only used for debugging
+    [[nodiscard]] Vertex *vertex(const std::string &name) const;
+    [[nodiscard]] Port *port(const std::string &vertex_name, const std::string &port_name) const;
+
 private:
     // memory storage
     std::vector<std::unique_ptr<Edge>> edges_;
@@ -71,5 +75,7 @@ struct Port {
 // compute the partition size
 std::vector<std::pair<uint32_t, int>> compute_cut_groups(const std::map<int, uint64_t> &edge_sizes,
                                                          int partition_size);
+
+bool has_path(const Port *from, const Port *to);
 
 #endif  // VIRTUALIZATION_GRAPH_HH

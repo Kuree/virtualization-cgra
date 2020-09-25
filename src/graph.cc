@@ -1,8 +1,13 @@
 #include "graph.hh"
 
+#include <fmt/format.h>
+
 #include <cmath>
+#include <queue>
 #include <unordered_map>
 #include <unordered_set>
+
+using fmt::format;
 
 Graph::Graph(const std::map<std::string, std::vector<std::pair<std::string, std::string>>> &netlist,
              const std::map<std::string, uint32_t> &track_mode) {
@@ -79,7 +84,7 @@ void label_edge_data_wave(Vertex *vertex, uint32_t wave_number,
         auto v = edge->to->vertex;
         // prevent loop
         if (visited.find(v) != visited.end())
-            throw std::runtime_error("Loop detected in " + v->name);
+            throw std::runtime_error(::format("Loop detected in {0}", v->name));
         // recursive call
         label_edge_data_wave(v, next_wave_number, visited);
     }
@@ -107,7 +112,8 @@ void Graph::compute_data_wave() {
     // sanity check
     for (auto const &edge : edges_) {
         if (!edge->valid)
-            throw std::runtime_error("Invalid edge " + edge->from->name + " -> " + edge->to->name);
+            throw std::runtime_error(
+                ::format("Invalid edge: {0} -> {1}", edge->from->name, edge->to->name));
     }
 }
 
@@ -158,6 +164,25 @@ private:
     std::unordered_set<const Vertex *> boundary_vertices_;
 };
 
+Vertex *Graph::vertex(const std::string &name) const {
+    for (auto const &v : vertices_) {
+        if (v->name == name) return v.get();
+    }
+    return nullptr;
+}
+
+Port *Graph::port(const std::string &vertex_name, const std::string &port_name) const {
+    for (auto const &v : vertices_) {
+        if (v->name == vertex_name) {
+            if (v->ports.find(port_name) == v->ports.end())
+                throw std::runtime_error(
+                    ::format("Unable to find {0}.{1}", vertex_name, port_name));
+            return v->ports.at(port_name);
+        }
+    }
+    return nullptr;
+}
+
 std::vector<Edge *> Graph::partition(uint32_t max_partition_size) {
     // for PnR's purpose, given a max size, usually can do a good job around 80%-90% usage
     // we use 0.8 here just to do a approximation
@@ -203,4 +228,27 @@ std::vector<std::pair<uint32_t, int>> compute_cut_groups(const std::map<int, uin
         }
     }
     return cut_wave_numbers;
+}
+
+bool has_path(const Port *from, const Port *to) {
+    // depth first search
+    std::queue<const Port *> working_set;
+    std::unordered_set<const Port *> visited;
+
+    working_set.emplace(from);
+
+    while (!working_set.empty()) {
+        auto const *port = working_set.front();
+        working_set.pop();
+        visited.emplace(from);
+        auto const *v = port->vertex;
+        for (auto const *e : v->edges_to) {
+            auto const *p = e->to;
+            if (p == to) return true;
+            if (visited.find(p) == visited.end()) {
+                working_set.emplace(p);
+            }
+        }
+    }
+    return false;
 }
