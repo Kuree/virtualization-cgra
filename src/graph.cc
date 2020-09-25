@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include <queue>
+#include <sstream>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -89,6 +90,97 @@ void label_edge_data_wave(Vertex *vertex, uint32_t wave_number,
         label_edge_data_wave(v, next_wave_number, visited);
     }
     visited.erase(vertex);
+}
+
+std::string Graph::dump_dot_graph() const {
+    std::stringstream stream;
+    using std::endl;
+
+    stream << "digraph D { " << endl;
+    // dump all edges
+    for (auto const &edge : edges_) {
+        auto from = edge->from->vertex;
+        auto to = edge->to->vertex;
+        stream << "    " << from->name << " -> " << to->name;
+        if (edge->valid) {
+            stream << ::format(" [ label = \"{0}\" ]", edge->wave_number);
+        }
+        stream << ";" << endl;
+    }
+
+    stream << "}" << endl;
+
+    return stream.str();
+}
+
+std::vector<const Edge *> Graph::get_edges(const std::function<bool(const Edge *)> &predicate) {
+    std::vector<const Edge *> result;
+    for (auto const &edge : edges_) {
+        if (predicate(edge.get())) {
+            result.emplace_back(edge.get());
+        }
+    }
+    return result;
+}
+
+[[maybe_unused]] std::vector<const Vertex *> Graph::get_vertices(
+    const std::function<bool(const Vertex *)> &predicate) {
+    std::vector<const Vertex *> result;
+    for (auto const &vertex : vertices_) {
+        if (predicate(vertex.get())) {
+            result.emplace_back(vertex.get());
+        }
+    }
+    return result;
+}
+
+void Graph::remove_edges(const std::vector<const Edge *> &edges) {
+    for (auto const &edge : edges) {
+        auto *from = edge->from->vertex;
+        auto *to = edge->to->vertex;
+        // use templated lambda once C++20 is out
+        auto remove_edge = [](std::vector<Edge *> &edges, const Edge *e) {
+            auto pos = std::find(edges.begin(), edges.end(), e);
+            if (pos == edges.end()) {
+                throw std::runtime_error("Invalid graph state");
+            }
+            edges.erase(pos);
+        };
+        remove_edge(from->edges_to, edge);
+        remove_edge(to->edges_from, edge);
+
+        // remove unique_ptr as well
+        bool deleted = false;
+        for (auto it = edges_.begin(); it != edges_.end(); it++) {
+            if ((*it).get() == edge) {
+                edges_.erase(it);
+                deleted = true;
+                break;
+            }
+        }
+        if (!deleted) throw std::runtime_error("Unable to find target edge to delete");
+    }
+}
+
+void Graph::remove_vertices(const std::vector<const Vertex *> &vertices) {
+    for (auto const *vertex : vertices) {
+        auto edges_to = std::vector<const Edge *>(vertex->edges_to.begin(), vertex->edges_to.end());
+        auto edges_from =
+            std::vector<const Edge *>(vertex->edges_from.begin(), vertex->edges_from.end());
+        remove_edges(edges_to);
+        remove_edges(edges_from);
+
+        // remove vertex from memory holder
+        bool deleted = false;
+        for (auto it = vertices_.begin(); it != vertices_.end(); it++) {
+            if ((*it).get() == vertex) {
+                vertices_.erase(it);
+                deleted = true;
+                break;
+            }
+        }
+        if (!deleted) throw std::runtime_error("Unable to find target vertex to delete");
+    }
 }
 
 void Graph::compute_data_wave() {

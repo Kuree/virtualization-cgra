@@ -1,6 +1,7 @@
 #ifndef VIRTUALIZATION_GRAPH_HH
 #define VIRTUALIZATION_GRAPH_HH
 
+#include <functional>
 #include <map>
 #include <memory>
 #include <string>
@@ -34,6 +35,16 @@ public:
     [[nodiscard]] Vertex *vertex(const std::string &name) const;
     [[nodiscard]] Port *port(const std::string &vertex_name, const std::string &port_name) const;
 
+    void compute_data_wave();
+
+    [[nodiscard]] std::string dump_dot_graph() const;
+
+    std::vector<const Edge *> get_edges(const std::function<bool(const Edge *)> &predicate);
+    [[maybe_unused]] std::vector<const Vertex *> get_vertices(
+        const std::function<bool(const Vertex *)> &predicate);
+    void remove_edges(const std::vector<const Edge *> &edges);
+    void remove_vertices(const std::vector<const Vertex *> &vertices);
+
 private:
     // memory storage
     std::vector<std::unique_ptr<Edge>> edges_;
@@ -44,8 +55,6 @@ private:
                    std::map<std::pair<std::string, std::string>, Port *> &port_to_ptr,
                    std::map<std::string, Vertex *> &vertex_to_ptr);
     Edge *connect(Port *from, Port *to);
-
-    void compute_data_wave();
 };
 
 struct Edge {

@@ -122,3 +122,12 @@ std::unique_ptr<Netlist> load_netlist(const std::string &filename) {
     auto graph = std::make_shared<Graph>(netlist, track_mode);
     return std::make_unique<Netlist>(graph);
 }
+
+
+void dump_dot_graph(const Graph &graph, const std::string &filename) {
+    auto s = graph.dump_dot_graph();
+    std::ofstream stream(filename);
+    stream << s;
+    stream.flush();
+    stream.close();
+}
