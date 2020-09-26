@@ -5,6 +5,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 struct Edge;
@@ -39,7 +40,7 @@ public:
 
     [[nodiscard]] std::string dump_dot_graph() const;
 
-    std::vector<const Edge *> get_edges(const std::function<bool(const Edge *)> &predicate);
+    std::vector<const Edge *> get_edges(const std::function<bool(const Edge *)> &predicate) const;
     [[maybe_unused]] std::vector<const Vertex *> get_vertices(
         const std::function<bool(const Vertex *)> &predicate);
     void remove_edges(const std::vector<const Edge *> &edges);
@@ -79,6 +80,50 @@ struct Port {
     std::string name;
 
     Vertex *vertex = nullptr;
+};
+
+class SuperVertex;
+class SuperEdge {
+public:
+    std::vector<const Edge *> edges;
+    SuperVertex *from;
+    SuperVertex *to;
+};
+
+class MultiGraph {
+public:
+    MultiGraph(const Graph *graph);
+
+    void inline delete_vertex(SuperVertex *vertex) { vertices_.erase(vertex); }
+    void inline delete_edge(SuperEdge *edge) { edges_.erase(edge); }
+
+    // an expensive method. only used for debugging
+    [[nodiscard]] SuperVertex *find(const Vertex *vertex) const;
+
+    void merge(SuperEdge *edge);
+    [[nodiscard]] uint64_t edge_size() const { return edges_.size(); }
+
+private:
+    // memory holder
+    std::unordered_map<SuperVertex *, std::shared_ptr<SuperVertex>> vertices_;
+    std::unordered_map<SuperEdge *, std::shared_ptr<SuperEdge>> edges_;
+
+    SuperVertex *get_new_vertex();
+    SuperEdge *get_new_edge();
+};
+
+class SuperVertex {
+public:
+    std::unordered_set<const Vertex *> vertices;
+    std::unordered_set<SuperEdge *> edges_to;
+    std::unordered_set<SuperEdge *> edges_from;
+
+    SuperVertex(MultiGraph *graph) : graph_(graph) {}
+
+    void merge(SuperVertex *vertex);
+
+private:
+    MultiGraph *graph_;
 };
 
 // compute the partition size

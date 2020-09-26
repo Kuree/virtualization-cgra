@@ -113,7 +113,8 @@ std::string Graph::dump_dot_graph() const {
     return stream.str();
 }
 
-std::vector<const Edge *> Graph::get_edges(const std::function<bool(const Edge *)> &predicate) {
+std::vector<const Edge *> Graph::get_edges(
+    const std::function<bool(const Edge *)> &predicate) const {
     std::vector<const Edge *> result;
     for (auto const &edge : edges_) {
         if (predicate(edge.get())) {
@@ -278,23 +279,7 @@ Port *Graph::port(const std::string &vertex_name, const std::string &port_name) 
 std::vector<Edge *> Graph::partition(uint32_t max_partition_size) {
     // for PnR's purpose, given a max size, usually can do a good job around 80%-90% usage
     // we use 0.8 here just to do a approximation
-    constexpr double ratio = 0.8;
-    auto partition_size = static_cast<int>(max_partition_size * ratio);
-    // we use modified Karger's algorithm that preserves the data wave
-    // first we index the edge by its wave number
-    // notice that map is sorted
-    std::map<int, std::unordered_set<Edge *>> wave_edge_map;
-    std::map<int, uint64_t> edge_sizes;
-    for (auto const &edge : edges_) {
-        wave_edge_map[edge->wave_number].emplace(edge.get());
-    }
-    for (auto const &[cut_num, edges] : wave_edge_map) {
-        edge_sizes.emplace(cut_num, edges.size());
-    }
-
-    auto cut_eave_numbers = compute_cut_groups(edge_sizes, partition_size);
-
-    (void)cut_eave_numbers;
+    (void)max_partition_size;
 
     return {};
 }
@@ -343,4 +328,95 @@ bool has_path(const Port *from, const Port *to) {
         }
     }
     return false;
+}
+
+MultiGraph::MultiGraph(const Graph *graph) {
+    auto edges = graph->get_edges([](const Edge *) { return true; });
+    // copy the connections over
+    // this is necessary because we don't want to make any changes to the original graph
+    std::unordered_map<const Vertex *, SuperVertex *> vertex_map;
+
+    for (auto const *edge : edges) {
+        auto s_e = get_new_edge();
+        auto const *from = edge->from->vertex;
+        auto const *to = edge->to->vertex;
+        if (vertex_map.find(from) == vertex_map.end()) {
+            auto new_v = get_new_vertex();
+            new_v->vertices.emplace(from);
+            vertex_map.emplace(from, new_v);
+        }
+
+        if (vertex_map.find(to) == vertex_map.end()) {
+            auto new_v = get_new_vertex();
+            new_v->vertices.emplace(to);
+            vertex_map.emplace(to, new_v);
+        }
+
+        auto s_from = vertex_map.at(from);
+        auto s_to = vertex_map.at(to);
+        s_e->from = s_from;
+        s_e->to = s_to;
+        s_e->edges.emplace_back(edge);
+        s_from->edges_to.emplace(s_e);
+        s_to->edges_from.emplace(s_e);
+    }
+}
+
+SuperVertex *MultiGraph::get_new_vertex() {
+    auto v = std::make_shared<SuperVertex>(this);
+    vertices_.emplace(v.get(), v);
+    return v.get();
+}
+SuperEdge *MultiGraph::get_new_edge() {
+    auto e = std::make_shared<SuperEdge>();
+    edges_.emplace(e.get(), e);
+    return e.get();
+}
+
+SuperVertex *MultiGraph::find(const Vertex *vertex) const {
+    for (auto const &iter : vertices_) {
+        auto s_v = iter.first;
+        if (s_v->vertices.find(vertex) != s_v->vertices.end()) {
+            return s_v;
+        }
+    }
+    throw std::runtime_error(
+        ::format("Unable to find matching super vertex for {0}", vertex->name));
+}
+
+void MultiGraph::merge(SuperEdge *edge) {
+    // merge the two vertices connected by the edge
+    auto s_from = edge->from;
+    auto s_to = edge->to;
+    s_from->merge(s_to);
+}
+
+void SuperVertex::merge(SuperVertex *vertex) {
+    // this will delete the other vertex
+    // simple way to merge, maybe use set union?
+    for (auto const *v : vertex->vertices) vertices.emplace(v);
+    // we remove internal edges
+    for (auto *edge : vertex->edges_to) {
+        if (edge->to != this) {
+            edge->from = this;
+            edges_to.emplace(edge);
+        } else {
+            // delete this edge
+            edges_from.erase(edge);
+            graph_->delete_edge(edge);
+        }
+    }
+    for (auto *edge : vertex->edges_from) {
+        if (edge->from != this) {
+            edge->to = this;
+            edges_from.emplace(edge);
+        } else {
+            // delete this edge
+            edges_to.erase(edge);
+            graph_->delete_edge(edge);
+        }
+    }
+
+    // delete vertex
+    graph_->delete_vertex(vertex);
 }
