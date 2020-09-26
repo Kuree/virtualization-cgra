@@ -330,7 +330,7 @@ bool has_path(const Port *from, const Port *to) {
     return false;
 }
 
-MultiGraph::MultiGraph(const Graph *graph) {
+MultiGraph::MultiGraph(const Graph *graph, uint32_t target_wave) : target_wave_(target_wave) {
     auto edges = graph->get_edges([](const Edge *) { return true; });
     // copy the connections over
     // this is necessary because we don't want to make any changes to the original graph
@@ -359,6 +359,14 @@ MultiGraph::MultiGraph(const Graph *graph) {
         s_e->edges.emplace_back(edge);
         s_from->edges_to.emplace(s_e);
         s_to->edges_from.emplace(s_e);
+        s_e->wave_number = edge->wave_number;
+
+        // need to keep track of the wave edge
+        if (edge->wave_number == target_wave_) {
+            wave_edges_.emplace(s_e);
+        } else {
+            non_wave_edges_.emplace(s_e);
+        }
     }
 }
 
@@ -373,6 +381,15 @@ SuperEdge *MultiGraph::get_new_edge() {
     return e.get();
 }
 
+void MultiGraph::delete_edge(SuperEdge *edge) {
+    if (edge->wave_number == target_wave_) {
+        wave_edges_.erase(edge);
+    } else {
+        non_wave_edges_.erase(edge);
+    }
+    edges_.erase(edge);
+}
+
 SuperVertex *MultiGraph::find(const Vertex *vertex) const {
     for (auto const &iter : vertices_) {
         auto s_v = iter.first;
@@ -382,6 +399,10 @@ SuperVertex *MultiGraph::find(const Vertex *vertex) const {
     }
     throw std::runtime_error(
         ::format("Unable to find matching super vertex for {0}", vertex->name));
+}
+
+void MultiGraph::merge(uint32_t seed) {
+    (void)seed;
 }
 
 void MultiGraph::merge(SuperEdge *edge) {

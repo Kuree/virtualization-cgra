@@ -83,23 +83,25 @@ struct Port {
 };
 
 class SuperVertex;
-class SuperEdge {
-public:
+struct SuperEdge {
     std::vector<const Edge *> edges;
     SuperVertex *from;
     SuperVertex *to;
+
+    uint32_t wave_number;
 };
 
 class MultiGraph {
 public:
-    MultiGraph(const Graph *graph);
+    MultiGraph(const Graph *graph, uint32_t target_wave);
 
     void inline delete_vertex(SuperVertex *vertex) { vertices_.erase(vertex); }
-    void inline delete_edge(SuperEdge *edge) { edges_.erase(edge); }
+    void delete_edge(SuperEdge *edge);
 
     // an expensive method. only used for debugging
     [[nodiscard]] SuperVertex *find(const Vertex *vertex) const;
 
+    void merge(uint32_t seed);
     void merge(SuperEdge *edge);
     [[nodiscard]] uint64_t edge_size() const { return edges_.size(); }
 
@@ -107,6 +109,12 @@ private:
     // memory holder
     std::unordered_map<SuperVertex *, std::shared_ptr<SuperVertex>> vertices_;
     std::unordered_map<SuperEdge *, std::shared_ptr<SuperEdge>> edges_;
+
+    // these are designed to speed up the merge process
+    std::unordered_set<SuperEdge*> non_wave_edges_;
+    std::unordered_set<SuperEdge*> wave_edges_;
+
+    uint32_t target_wave_;
 
     SuperVertex *get_new_vertex();
     SuperEdge *get_new_edge();

@@ -17,7 +17,7 @@ TEST(multi_graph, merge) {  // NOLINT
     // remove reset
     remove_reset(graph);
 
-    auto mg = MultiGraph(graph);
+    auto mg = MultiGraph(graph, 2);
     // a random vertex
     auto m58 = graph->vertex("m58");
     auto sv_m58 = mg.find(m58);
