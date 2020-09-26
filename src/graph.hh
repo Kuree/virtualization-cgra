@@ -104,6 +104,9 @@ public:
     void merge(uint32_t seed);
     void merge(SuperEdge *edge);
     [[nodiscard]] uint64_t edge_size() const { return edges_.size(); }
+    [[nodiscard]] uint64_t vertex_size() const { return vertices_.size(); }
+    [[nodiscard]] std::vector<SuperEdge *> edges() const;
+    [[nodiscard]] std::vector<SuperVertex *> vertices() const;
 
 private:
     // memory holder
@@ -111,8 +114,8 @@ private:
     std::unordered_map<SuperEdge *, std::shared_ptr<SuperEdge>> edges_;
 
     // these are designed to speed up the merge process
-    std::unordered_set<SuperEdge*> non_wave_edges_;
-    std::unordered_set<SuperEdge*> wave_edges_;
+    std::unordered_set<SuperEdge *> non_wave_edges_;
+    std::unordered_set<SuperEdge *> wave_edges_;
 
     uint32_t target_wave_;
 

@@ -8,10 +8,9 @@ TEST(graph, data_wave) {  // NOLINT
 
     // compute data wave
     EXPECT_NO_THROW(graph->compute_data_wave());
-
 }
 
-TEST(multi_graph, merge) {  // NOLINT
+TEST(multi_graph, merge_cascade) {  // NOLINT
     auto netlist = load_netlist("cascade.packed");
     auto graph = netlist->graph();
     // remove reset
@@ -38,4 +37,41 @@ TEST(multi_graph, merge) {  // NOLINT
     mg.merge(se);
     EXPECT_EQ(s_io, mg.find(m58));
     EXPECT_EQ(s_io->edges_to.size(), num_edges_io + num_edges_m58 - 1);
+}
+
+TEST(multi_graph, merge_duplicated_edge) {
+    std::map<std::string, std::vector<std::pair<std::string, std::string>>> netlist = {
+        {"e1", {{"p1", "a"}, {"p2", "b"}, {"p3", "b"}}},
+        {"e2", {{"p2", "c"}, {"p3", "d"}}},
+        {"e3", {{"p3", "e"}, {"p1", "f"}}},
+    };
+    std::map<std::string, uint32_t> bus_mode = {{"e1", 16}, {"e2", 16}, {"e3", 16}};
+
+    Graph graph(netlist, bus_mode);
+    MultiGraph mg(&graph, 1);
+
+    // we merge p1 and p2, to see if duplicated edges are removed
+    auto p1 = graph.vertex("p1");
+    auto p2 = graph.vertex("p2");
+    auto s_p1 = mg.find(p1);
+    auto s_p2 = mg.find(p2);
+    s_p1->merge(s_p2);
+    // should be only two vertices left
+    EXPECT_EQ(mg.edge_size(), 2);
+    // total vertices should be 2 as well
+    EXPECT_EQ(mg.vertex_size(), 2);
+
+    // need to further verify the connections
+    auto vertices = mg.vertices();
+    EXPECT_EQ(vertices.size(), 2);
+    EXPECT_TRUE(vertices[0]->vertices.size() == 2 || vertices[1]->vertices.size() == 2);
+    auto s_p1_ = vertices[0]->vertices.size() == 2? vertices[0]: vertices[1];
+    EXPECT_NE(s_p1_->vertices.find(p1), s_p1_->vertices.end());
+
+    // check edges as well
+    auto edges = mg.edges();
+    EXPECT_EQ(edges.size(), 2);
+    EXPECT_TRUE(edges[0]->edges.size() == 2 || edges[1]->edges.size() == 2);
+    auto s_p1_p3 = edges[0]->edges.size() == 2? edges[0] : edges[1];
+    EXPECT_EQ(s_p1_p3->from, s_p1_);
 }

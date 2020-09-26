@@ -430,10 +430,23 @@ void MultiGraph::merge(SuperEdge *edge) {
     s_from->merge(s_to);
 }
 
+std::vector<SuperEdge *> MultiGraph::edges() const {
+    std::vector<SuperEdge *> result;
+    result.reserve(edge_size());
+    for (auto const &it : edges_) result.emplace_back(it.first);
+    return result;
+}
+
+std::vector<SuperVertex *> MultiGraph::vertices() const {
+    std::vector<SuperVertex *> result;
+    result.reserve(vertex_size());
+    for (auto const &it : vertices_) result.emplace_back(it.first);
+    return result;
+}
+
 void SuperVertex::merge(SuperVertex *vertex) {
     // this will delete the other vertex
     // simple way to merge, maybe use set union?
-    // TODO: remove duplicated edges where end/to are the same
     for (auto const *v : vertex->vertices) vertices.emplace(v);
     // we remove internal edges
     for (auto *edge : vertex->edges_to) {
@@ -456,6 +469,32 @@ void SuperVertex::merge(SuperVertex *vertex) {
             graph_->delete_edge(edge);
         }
     }
+    // remove duplicated edges
+    // we only need to keep one
+    // maybe have a better data structure to speed up?
+    auto clean_up_connection = [this](std::unordered_set<SuperEdge *> &target_set) {
+        std::unordered_map<SuperVertex *, std::vector<SuperEdge *>> connections;
+        // edges to first
+        for (auto *edge : target_set) {
+            connections[edge->to].emplace_back(edge);
+        }
+        for (auto const &iter : connections) {
+            auto edges = iter.second;
+            if (edges.size() > 1) {
+                // need to condense it
+                auto *base_edge = edges[0];
+                for (uint64_t i = 1; i < edges.size(); i++) {
+                    auto *target_edge = edges[i];
+                    for (auto const *e : target_edge->edges) base_edge->edges.emplace_back(e);
+                    target_set.erase(target_edge);
+                    graph_->delete_edge(target_edge);
+                }
+            }
+        }
+    };
+
+    clean_up_connection(edges_to);
+    clean_up_connection(edges_from);
 
     // delete vertex
     graph_->delete_vertex(vertex);
