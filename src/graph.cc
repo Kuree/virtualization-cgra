@@ -2,8 +2,8 @@
 
 #include <fmt/format.h>
 
-#include <cmath>
 #include <queue>
+#include <random>
 #include <sstream>
 #include <unordered_map>
 #include <unordered_set>
@@ -402,7 +402,25 @@ SuperVertex *MultiGraph::find(const Vertex *vertex) const {
 }
 
 void MultiGraph::merge(uint32_t seed) {
-    (void)seed;
+    std::mt19937 gen(seed);
+    std::uniform_int_distribution<uint32_t> distrib(0);
+
+    while (edges_.size() > 1) {
+        // if we still have non-wave edges left, need to randomly pick one and choose them
+        uint32_t index = distrib(gen);
+        if (!non_wave_edges_.empty()) {
+            // pick an edge from non-wave edges
+            index = index % non_wave_edges_.size();
+            auto edge_it = std::next(non_wave_edges_.begin(), index);
+            auto edge = *edge_it;
+            merge(edge);
+        } else {
+            index = index % wave_edges_.size();
+            auto edge_it = std::next(wave_edges_.begin(), index);
+            auto edge = *edge_it;
+            merge(edge);
+        }
+    }
 }
 
 void MultiGraph::merge(SuperEdge *edge) {
@@ -415,6 +433,7 @@ void MultiGraph::merge(SuperEdge *edge) {
 void SuperVertex::merge(SuperVertex *vertex) {
     // this will delete the other vertex
     // simple way to merge, maybe use set union?
+    // TODO: remove duplicated edges where end/to are the same
     for (auto const *v : vertex->vertices) vertices.emplace(v);
     // we remove internal edges
     for (auto *edge : vertex->edges_to) {
