@@ -10,7 +10,7 @@ TEST(graph, data_wave) {  // NOLINT
     EXPECT_NO_THROW(graph->compute_data_wave());
 }
 
-TEST(multi_graph, merge_cascade) {  // NOLINT
+TEST(multi_graph, merge_cascade_edge) {  // NOLINT
     auto netlist = load_netlist("cascade.packed");
     auto graph = netlist->graph();
     // remove reset
@@ -74,4 +74,34 @@ TEST(multi_graph, merge_duplicated_edge) {
     EXPECT_TRUE(edges[0]->edges.size() == 2 || edges[1]->edges.size() == 2);
     auto s_p1_p3 = edges[0]->edges.size() == 2? edges[0] : edges[1];
     EXPECT_EQ(s_p1_p3->from, s_p1_);
+}
+
+TEST(multi_graph, merge_cascade_wave) {
+    auto netlist = load_netlist("cascade.packed");
+    auto graph = netlist->graph();
+    // remove reset
+    remove_reset(graph);
+
+    // compute data waves
+    graph->compute_data_wave();
+
+    auto mg = MultiGraph(graph, 2);
+    constexpr uint32_t seed = 0;
+    mg.merge(seed);
+
+    auto vertices = mg.vertices();
+    EXPECT_EQ(vertices.size(), 2);
+    auto edges = mg.edges();
+    EXPECT_EQ(edges.size(), 1);
+    auto g_edges = edges[0]->edges;
+    EXPECT_EQ(g_edges.size(), 3);
+    auto result_ports = mg.edges_to_cut();
+    EXPECT_EQ(result_ports.size(), 2);
+    // we need to keep two vertices as IO ports
+    EXPECT_EQ(mg.score(), 2);
+    // seed 0: p8 and p51
+    auto p8_alu_res = graph->vertex("p8")->ports["alu_res"];
+    auto p51_alu_res = graph->vertex("p51")->ports["alu_res"];
+    EXPECT_NE(result_ports.find(p8_alu_res), result_ports.end());
+    EXPECT_NE(result_ports.find(p51_alu_res), result_ports.end());
 }

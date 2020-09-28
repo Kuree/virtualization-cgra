@@ -95,7 +95,7 @@ class MultiGraph {
 public:
     MultiGraph(const Graph *graph, uint32_t target_wave);
 
-    void inline delete_vertex(SuperVertex *vertex) { vertices_.erase(vertex); }
+    void inline delete_vertex(SuperVertex *vertex);
     void delete_edge(SuperEdge *edge);
 
     // an expensive method. only used for debugging
@@ -107,6 +107,9 @@ public:
     [[nodiscard]] uint64_t vertex_size() const { return vertices_.size(); }
     [[nodiscard]] std::vector<SuperEdge *> edges() const;
     [[nodiscard]] std::vector<SuperVertex *> vertices() const;
+
+    [[nodiscard]] std::unordered_set<Port *> edges_to_cut() const;
+    [[nodiscard]] uint64_t score() const;
 
 private:
     // memory holder
