@@ -55,7 +55,7 @@ TEST(multi_graph, merge_duplicated_edge) {
     auto p2 = graph.vertex("p2");
     auto s_p1 = mg.find(p1);
     auto s_p2 = mg.find(p2);
-    s_p1->merge(s_p2);
+    mg.merge(s_p1, s_p2);
     // should be only two vertices left
     EXPECT_EQ(mg.edge_size(), 2);
     // total vertices should be 2 as well
@@ -65,14 +65,14 @@ TEST(multi_graph, merge_duplicated_edge) {
     auto vertices = mg.vertices();
     EXPECT_EQ(vertices.size(), 2);
     EXPECT_TRUE(vertices[0]->vertices.size() == 2 || vertices[1]->vertices.size() == 2);
-    auto s_p1_ = vertices[0]->vertices.size() == 2? vertices[0]: vertices[1];
+    auto s_p1_ = vertices[0]->vertices.size() == 2 ? vertices[0] : vertices[1];
     EXPECT_NE(s_p1_->vertices.find(p1), s_p1_->vertices.end());
 
     // check edges as well
     auto edges = mg.edges();
     EXPECT_EQ(edges.size(), 2);
     EXPECT_TRUE(edges[0]->edges.size() == 2 || edges[1]->edges.size() == 2);
-    auto s_p1_p3 = edges[0]->edges.size() == 2? edges[0] : edges[1];
+    auto s_p1_p3 = edges[0]->edges.size() == 2 ? edges[0] : edges[1];
     EXPECT_EQ(s_p1_p3->from, s_p1_);
 }
 
@@ -86,7 +86,7 @@ TEST(multi_graph, merge_cascade_wave) {
     graph->compute_data_wave();
 
     auto mg = MultiGraph(graph, 2);
-    constexpr uint32_t seed = 0;
+    constexpr uint32_t seed = 1;
     mg.merge(seed);
 
     auto vertices = mg.vertices();

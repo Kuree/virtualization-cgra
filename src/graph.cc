@@ -5,6 +5,7 @@
 #include <cassert>
 #include <queue>
 #include <random>
+#include <set>
 #include <sstream>
 #include <unordered_map>
 #include <unordered_set>
@@ -338,7 +339,7 @@ MultiGraph::MultiGraph(const Graph *graph, uint32_t target_wave) : target_wave_(
     std::unordered_map<const Vertex *, SuperVertex *> vertex_map;
 
     for (auto const *edge : edges) {
-        auto s_e = get_new_edge();
+        auto s_e = get_new_edge(edge->wave_number);
         auto const *from = edge->from->vertex;
         auto const *to = edge->to->vertex;
         if (vertex_map.find(from) == vertex_map.end()) {
@@ -357,17 +358,10 @@ MultiGraph::MultiGraph(const Graph *graph, uint32_t target_wave) : target_wave_(
         auto s_to = vertex_map.at(to);
         s_e->from = s_from;
         s_e->to = s_to;
-        s_e->edges.emplace_back(edge);
+        s_e->edges.emplace(edge);
         s_from->edges_to.emplace(s_e);
         s_to->edges_from.emplace(s_e);
         s_e->wave_number = edge->wave_number;
-
-        // need to keep track of the wave edge
-        if (edge->wave_number == target_wave_) {
-            wave_edges_.emplace(s_e);
-        } else {
-            non_wave_edges_.emplace(s_e);
-        }
     }
 }
 
@@ -376,17 +370,38 @@ SuperVertex *MultiGraph::get_new_vertex() {
     vertices_.emplace(v.get(), v);
     return v.get();
 }
-SuperEdge *MultiGraph::get_new_edge() {
+SuperEdge *MultiGraph::get_new_edge(uint32_t wave_number) {
     auto e = std::make_shared<SuperEdge>();
     edges_.emplace(e.get(), e);
+    if (wave_number == target_wave_) {
+        wave_edges_.emplace_back(e.get());
+    } else {
+        non_wave_edges_.emplace_back(e.get());
+    }
     return e.get();
+}
+
+auto erase = [](std::vector<SuperEdge *> &vector, SuperEdge *e) {
+    auto pos = std::find(vector.begin(), vector.end(), e);
+    if (pos == vector.end()) throw std::runtime_error("Invalid delete edge state");
+    vector.erase(pos);
+};
+
+void MultiGraph::reassign_wave(SuperEdge *target, SuperEdge *base) {
+    // if the target is not target wave number, don't care
+    if (target->wave_number != target_wave_) return;
+    if (target->wave_number == target_wave_ && base->wave_number != target_wave_) {
+        target->wave_number = base->wave_number;
+        erase(wave_edges_, target);
+        non_wave_edges_.emplace_back(target);
+    }
 }
 
 void MultiGraph::delete_edge(SuperEdge *edge) {
     if (edge->wave_number == target_wave_) {
-        wave_edges_.erase(edge);
+        erase(wave_edges_, edge);
     } else {
-        non_wave_edges_.erase(edge);
+        erase(non_wave_edges_, edge);
     }
     edges_.erase(edge);
 }
@@ -417,21 +432,19 @@ auto next(const T &set, uint32_t n) {
 
 void MultiGraph::merge(uint32_t seed) {
     std::mt19937 gen(seed);
-    std::uniform_int_distribution<uint32_t> distrib(0);
 
-    while (edges_.size() > 1) {
+    while (vertices_.size() > 2) {
         // if we still have non-wave edges left, need to randomly pick one and choose them
-        uint32_t index = distrib(gen);
         if (!non_wave_edges_.empty()) {
+            std::uniform_int_distribution<uint32_t> distrib(0, non_wave_edges_.size() - 1);
+            uint32_t index = distrib(gen);
             // pick an edge from non-wave edges
-            index = index % non_wave_edges_.size();
-            auto edge_it = next(non_wave_edges_, index);
-            auto edge = *edge_it;
+            auto edge = non_wave_edges_[index];
             merge(edge);
         } else {
-            index = index % wave_edges_.size();
-            auto edge_it = next(wave_edges_, index);
-            auto edge = *edge_it;
+            std::uniform_int_distribution<uint32_t> distrib(0, wave_edges_.size() - 1);
+            uint32_t index = distrib(gen);
+            auto edge = wave_edges_[index];
             merge(edge);
         }
     }
@@ -441,7 +454,7 @@ void MultiGraph::merge(SuperEdge *edge) {
     // merge the two vertices connected by the edge
     auto s_from = edge->from;
     auto s_to = edge->to;
-    s_from->merge(s_to);
+    merge(s_from, s_to);
 }
 
 std::vector<SuperEdge *> MultiGraph::edges() const {
@@ -458,76 +471,108 @@ std::vector<SuperVertex *> MultiGraph::vertices() const {
     return result;
 }
 
-void SuperVertex::merge(SuperVertex *vertex) {
-    // this will delete the other vertex
+void MultiGraph::merge(SuperVertex *a, SuperVertex *b) {
+    // check before and after size
+    uint64_t edge_count = 0;
+    for (auto const &iter : edges_) {
+        edge_count += iter.first->edges.size();
+    }
+    // this will delete both vertex a and b
     // simple way to merge, maybe use set union?
-    for (auto const *v : vertex->vertices) vertices.emplace(v);
-    // we remove internal edges
-    std::unordered_set<SuperEdge *> edges_to_delete;
-    for (auto *edge : vertex->edges_to) {
-        if (edge->to != this) {
-            edge->from = this;
-            edges_to.emplace(edge);
-        } else {
-            // delete this edge
-            // this will result in self loop
-            edges_from.erase(edge);
-            edges_to_delete.emplace(edge);
-        }
-    }
-    for (auto *edge : vertex->edges_from) {
-        if (edge->from != this) {
-            edge->to = this;
-            edges_from.emplace(edge);
-        } else {
-            // delete this edge
-            // this will result in self loop
-            edges_to.erase(edge);
-            edges_to_delete.emplace(edge);
-        }
-    }
-    // remove duplicated edges
-    // we only need to keep one
-    // maybe have a better data structure to speed up?
-    auto clean_up_connection = [&edges_to_delete](std::unordered_set<SuperEdge *> &target_set,
-                                                  bool index_by_to) {
-        std::unordered_map<SuperVertex *, std::vector<SuperEdge *>> connections;
-        // edges to first
-        for (auto *edge : target_set) {
-            if (index_by_to)
-                connections[edge->to].emplace_back(edge);
-            else
-                connections[edge->from].emplace_back(edge);
-        }
-        for (auto const &iter : connections) {
-            auto edges = iter.second;
-            if (edges.size() > 1) {
-                // need to condense it
-                auto base_edge = edges[0];
-                for (uint64_t i = 1; i < edges.size(); i++) {
-                    auto *target_edge = edges[i];
-                    target_set.erase(target_edge);
-                    for (auto *e : target_edge->edges) base_edge->edges.emplace_back(e);
+    // brute force
+    auto new_vertex = get_new_vertex();
+    for (auto *v : a->vertices) new_vertex->vertices.emplace(v);
+    for (auto *v : b->vertices) new_vertex->vertices.emplace(v);
 
-                    if (index_by_to) {
-                        target_edge->to->edges_from.erase(target_edge);
-                    } else {
-                        target_edge->from->edges_to.erase(target_edge);
-                    }
-                    edges_to_delete.emplace(target_edge);
-                }
+    for (auto &iter : edges_) {
+        auto *e = iter.first;
+        if (e->to == a) e->to = new_vertex;
+        if (e->from == a) e->from = new_vertex;
+        if (e->to == b) e->to = new_vertex;
+        if (e->from == b) e->from = new_vertex;
+    }
+    // delete edges
+    std::unordered_set<SuperEdge *> edges_to_remove;
+    std::map<std::pair<SuperVertex *, SuperVertex *>, SuperEdge *> connection_map;
+    for (auto &iter : edges_) {
+        auto edge = iter.first;
+        auto from = edge->from;
+        auto to = edge->to;
+        auto p = std::make_pair(from, to);
+        if (connection_map.find(p) == connection_map.end()) {
+            connection_map.emplace(p, edge);
+            if (from == new_vertex) new_vertex->edges_to.emplace(edge);
+            if (to == new_vertex) new_vertex->edges_from.emplace(edge);
+        } else {
+            // merge the edge to the target
+            auto target = connection_map.at(p);
+            target->merge(edge);
+            reassign_wave(target, edge);
+            from->edges_to.erase(edge);
+            to->edges_from.erase(edge);
+            edges_to_remove.emplace(edge);
+        }
+    }
+    // check backward loop
+    std::map<std::pair<SuperVertex *, SuperVertex *>, std::pair<SuperVertex *, SuperVertex *>>
+        loop_map;
+    for (auto &iter : connection_map) {
+        auto &p = iter.first;
+        auto [from, to] = p;
+        auto pair = std::make_pair(to, from);
+        if (connection_map.find(pair) != connection_map.end()) {
+            // don't double count
+            if (loop_map.find(pair) == loop_map.end()) {
+                loop_map.emplace(p, pair);
             }
         }
-    };
-
-    clean_up_connection(edges_to, true);
-    clean_up_connection(edges_from, false);
-
-    // delete vertex
-    graph_->delete_vertex(vertex);
-    for (auto *e : edges_to_delete) {
-        graph_->delete_edge(e);
     }
+    for (auto &iter : loop_map) {
+        auto target_pair = iter.first;
+        auto base_pair = iter.second;
+        auto target_e = connection_map.at(target_pair);
+        auto base_e = connection_map.at(base_pair);
+        target_e->merge(base_e);
+        reassign_wave(target_e, base_e);
+        auto [from, to] = base_pair;
+        from->edges_to.erase(base_e);
+        to->edges_from.erase(base_e);
+        edges_to_remove.emplace(base_e);
+    }
+
+    // check self loop
+    uint64_t num_self_loop = 0;
+    auto loop = std::make_pair(new_vertex, new_vertex);
+    if (connection_map.find(loop) != connection_map.end()) {
+        auto edge = connection_map.at(loop);
+        edges_to_remove.emplace(edge);
+        new_vertex->edges_from.erase(edge);
+        new_vertex->edges_to.erase(edge);
+        num_self_loop += edge->edges.size();
+    }
+
+    for (auto *e : edges_to_remove) delete_edge(e);
+
+    // sanity check
+    uint64_t new_edge_count = 0;
+    for (auto const &iter : edges_) {
+        new_edge_count += iter.first->edges.size();
+    }
+    assert((new_edge_count + num_self_loop) == edge_count);
+    auto es = edges();
+    for (auto *edge : es) {
+        if (edge->to == b || edge->from == b) {
+            throw std::runtime_error("invalid state");
+        }
+        if (edge->to == edge->from) {
+            throw std::runtime_error("invalid state");
+        }
+    }
+    if ((num_non_wave_edges() + num_wave_edges()) != es.size())
+        throw std::runtime_error("invalid state");
+
+    delete_vertex(a);
+    delete_vertex(b);
 }
 
 std::unordered_set<Port *> MultiGraph::edges_to_cut() const {

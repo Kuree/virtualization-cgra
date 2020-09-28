@@ -7,6 +7,7 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
+#include <set>
 
 struct Edge;
 struct Vertex;
@@ -84,11 +85,15 @@ struct Port {
 
 class SuperVertex;
 struct SuperEdge {
-    std::vector<const Edge *> edges;
+    std::set<const Edge *> edges;
     SuperVertex *from;
     SuperVertex *to;
 
     uint32_t wave_number;
+
+    inline void merge(SuperEdge *se) {
+        for (auto e : se->edges) edges.emplace(e);
+    }
 };
 
 class MultiGraph {
@@ -103,10 +108,14 @@ public:
 
     void merge(uint32_t seed);
     void merge(SuperEdge *edge);
+    void merge(SuperVertex *a, SuperVertex *b);
+
     [[nodiscard]] uint64_t edge_size() const { return edges_.size(); }
     [[nodiscard]] uint64_t vertex_size() const { return vertices_.size(); }
     [[nodiscard]] std::vector<SuperEdge *> edges() const;
     [[nodiscard]] std::vector<SuperVertex *> vertices() const;
+    [[nodiscard]] uint64_t num_wave_edges() const { return wave_edges_.size(); }
+    [[nodiscard]] uint64_t num_non_wave_edges() const { return non_wave_edges_.size(); }
 
     [[nodiscard]] std::unordered_set<Port *> edges_to_cut() const;
     [[nodiscard]] uint64_t score() const;
@@ -117,13 +126,19 @@ private:
     std::unordered_map<SuperEdge *, std::shared_ptr<SuperEdge>> edges_;
 
     // these are designed to speed up the merge process
-    std::unordered_set<SuperEdge *> non_wave_edges_;
-    std::unordered_set<SuperEdge *> wave_edges_;
+    std::vector<SuperEdge *> non_wave_edges_;
+    std::vector<SuperEdge *> wave_edges_;
+
+    // used for lookup
+    std::unordered_set<Edge *, SuperEdge *> edges_map_;
 
     uint32_t target_wave_;
 
     SuperVertex *get_new_vertex();
-    SuperEdge *get_new_edge();
+    SuperEdge *get_new_edge(uint32_t wave_number);
+
+    void reassign_wave(SuperEdge* target, SuperEdge* base);
+
 };
 
 class SuperVertex {
@@ -133,8 +148,6 @@ public:
     std::unordered_set<SuperEdge *> edges_from;
 
     SuperVertex(MultiGraph *graph) : graph_(graph) {}
-
-    void merge(SuperVertex *vertex);
 
 private:
     MultiGraph *graph_;
