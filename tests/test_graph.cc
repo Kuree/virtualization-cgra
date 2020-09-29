@@ -111,7 +111,7 @@ TEST(multi_graph, merge_cascade_wave) {
     EXPECT_EQ(count, 2);
 }
 
-TEST(netlist, partition) {
+TEST(netlist, partition_cascade) {
     auto netlist = load_netlist("cascade.packed");
     auto result = netlist->partition(2);
     auto ports = result.get_ports();

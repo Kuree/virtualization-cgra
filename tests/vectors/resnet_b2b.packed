@@ -1,0 +1,61 @@
+Netlists:
+e0: (I3, io2f_16)	(m16, data_in_0)
+e1: (I4, io2f_16)	(m17, data_in_0)
+e2: (m16, data_out_0)	(p18, data0)
+e3: (m17, data_out_0)	(p18, data1)
+e4: (p18, alu_res)	(p1, data0)
+e6: (m15, data_out_0)	(p19, data1)	(m11, data_in_0)
+e7: (m16, stencil_valid)	(p19, bit0)
+e8: (p19, alu_res)	(p1, data1)
+e9: (p1, alu_res)	(m15, data_in_0)
+e10: (i7, io2f_1)	(m16, flush)	(m17, flush)	(m15, flush)	(m11, flush)	(m12, flush)	(m10, flush)
+e11: (I5, io2f_16)	(m12, data_in_0)
+e12: (m11, data_out_0)	(p13, data0)
+e13: (m12, data_out_0)	(p13, data1)
+e14: (p13, alu_res)	(p9, data0)
+e16: (m10, data_out_0)	(p14, data1)	(I2, f2io_16)
+e17: (m11, stencil_valid)	(p14, bit0)
+e18: (p14, alu_res)	(p9, data1)
+e19: (p9, alu_res)	(m10, data_in_0)
+e20: (m10, stencil_valid)	(i6, f2io_1)
+
+ID to Names:
+p1: add_w0_accum$binop
+I2: io16_out_0_0
+I3: io16in_in0_arg_input
+I4: io16in_in1_arg_weight
+I5: io16in_in2_arg_weight2
+i6: io1_valid
+i7: io1in_reset
+p9: l2_add_w0_accum$binop
+m10: l2_lakemem_conv
+m11: l2_lakemem_input
+m12: l2_lakemem_weight
+p13: l2_mul_z0_w0$binop
+p14: l2_mux_w0$mux
+m15: lakemem_conv
+m16: lakemem_input
+m17: lakemem_weight
+p18: mul_z0_w0$binop
+p19: mux_w0$mux
+
+Netlist Bus:
+e0: 16
+e1: 16
+e2: 16
+e3: 16
+e4: 16
+e6: 16
+e7: 1
+e8: 16
+e9: 16
+e10: 1
+e11: 16
+e12: 16
+e13: 16
+e14: 16
+e16: 16
+e17: 1
+e18: 16
+e19: 16
+e20: 1

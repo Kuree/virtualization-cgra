@@ -3,7 +3,7 @@
 #include "../src/pass.hh"
 
 
-TEST(io, load_netlist) {  // NOLINT
+TEST(io, load_netlist_cascade) {  // NOLINT
     auto netlist = load_netlist("cascade.packed");
     auto graph = netlist->graph();
     EXPECT_NE(graph, nullptr);
@@ -12,6 +12,14 @@ TEST(io, load_netlist) {  // NOLINT
     EXPECT_NE(io_in, nullptr);
     EXPECT_NE(io_out, nullptr);
     EXPECT_TRUE(has_path(io_in, io_out));
+}
+
+TEST(io, load_netlist_resnet_b2b) { // NOLINT
+    auto netlist = load_netlist("resnet_b2b.packed");
+    auto graph = netlist->graph();
+    EXPECT_NE(graph, nullptr);
+    auto io_in = graph->vertex("I3");
+    EXPECT_NE(io_in, nullptr);
 }
 
 TEST(io, dump_dot_graph) {  // NOLINT

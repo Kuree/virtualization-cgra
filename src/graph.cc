@@ -97,7 +97,7 @@ void label_edge_data_wave(Vertex *vertex, uint32_t wave_number,
         auto v = edge->to->vertex;
         // prevent loop
         if (visited.find(v) != visited.end())
-            throw std::runtime_error(::format("Loop detected in {0}", v->name));
+            continue;
         // recursive call
         label_edge_data_wave(v, next_wave_number, visited);
     }
