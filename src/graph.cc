@@ -437,6 +437,13 @@ std::vector<SuperVertex *> MultiGraph::vertices() const {
     return result;
 }
 
+struct pair_hash {
+    template <class T1, class T2>
+    std::size_t operator()(const std::pair<T1, T2> &pair) const {
+        return std::hash<T1>()(pair.first) ^ std::hash<T2>()(pair.second);
+    }
+};
+
 void MultiGraph::merge(SuperVertex *a, SuperVertex *b) {
     // check before and after size
     uint64_t edge_count = 0;
@@ -459,8 +466,14 @@ void MultiGraph::merge(SuperVertex *a, SuperVertex *b) {
     for (auto *v : a->vertices) new_vertex->vertices.emplace(v);
     for (auto *v : b->vertices) new_vertex->vertices.emplace(v);
 
-    for (auto &iter : edges_) {
-        auto *e = iter.first;
+    // only interested in the neighbor edges
+    std::set<SuperEdge *> edges;
+    for (auto *e : a->edges_to) edges.emplace(e);
+    for (auto *e : a->edges_from) edges.emplace(e);
+    for (auto *e : b->edges_to) edges.emplace(e);
+    for (auto *e : b->edges_from) edges.emplace(e);
+
+    for (auto &e : edges) {
         if (e->to == a) e->to = new_vertex;
         if (e->from == a) e->from = new_vertex;
         if (e->to == b) e->to = new_vertex;
@@ -468,9 +481,9 @@ void MultiGraph::merge(SuperVertex *a, SuperVertex *b) {
     }
     // delete edges
     std::unordered_map<SuperEdge *, SuperEdge *> edges_to_remove;
-    std::map<std::pair<SuperVertex *, SuperVertex *>, SuperEdge *> connection_map;
-    for (auto &iter : edges_) {
-        auto edge = iter.first;
+    std::unordered_map<std::pair<SuperVertex *, SuperVertex *>, SuperEdge *, pair_hash>
+        connection_map;
+    for (auto &edge : edges) {
         auto from = edge->from;
         auto to = edge->to;
         auto p = std::make_pair(from, to);
@@ -488,7 +501,7 @@ void MultiGraph::merge(SuperVertex *a, SuperVertex *b) {
         }
     }
     // check backward loop
-    std::map<std::pair<SuperVertex *, SuperVertex *>, std::pair<SuperVertex *, SuperVertex *>>
+    std::unordered_map<std::pair<SuperVertex *, SuperVertex *>, std::pair<SuperVertex *, SuperVertex *>, pair_hash>
         loop_map;
     for (auto &iter : connection_map) {
         auto &p = iter.first;
@@ -539,7 +552,7 @@ void MultiGraph::merge(SuperVertex *a, SuperVertex *b) {
         new_edge_count += iter.first->edges.size();
     }
     assert((new_edge_count + num_self_loop) == edge_count);
-    auto es = edges();
+    auto es = this->edges();
     for (auto *edge : es) {
         if (edge->to == b || edge->from == b) {
             throw std::runtime_error("invalid state");
@@ -611,9 +624,8 @@ uint32_t CutResult::score() const {
 }
 
 std::unordered_set<Port *> CutResult::get_ports() const {
-    std::unordered_set<Port*> ports;
-    for (auto *e: edges_)
-        ports.emplace(e->from);
+    std::unordered_set<Port *> ports;
+    for (auto *e : edges_) ports.emplace(e->from);
     return ports;
 }
 
