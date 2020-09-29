@@ -103,16 +103,16 @@ TEST(multi_graph, merge_cascade_wave) {
     EXPECT_TRUE(score > 10);
     auto ports = result.get_ports();
     EXPECT_EQ(ports.size(), 2);
-    // p65 and r68
-    auto p65 = graph->vertex("p65");
-    auto p65_port = p65->ports["alu_res"];
-    auto r68 = graph->vertex("r68");
-    auto r68_port = r68->ports["reg"];
+    // m58 and p1
+    auto m58 = graph->vertex("m58");
+    auto m58_port = m58->ports["data_out_0"];
+    auto p1 = graph->vertex("p1");
+    auto p1_port = p1->ports["alu_res"];
     uint32_t count = 0;
     for (auto const *p: ports) {
-        if (p == p65_port)
+        if (p == m58_port)
             count++;
-        if (p == r68_port)
+        if (p == p1_port)
             count++;
     }
     EXPECT_EQ(count, 2);

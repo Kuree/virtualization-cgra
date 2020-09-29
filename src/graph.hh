@@ -32,9 +32,6 @@ public:
     Graph(const std::map<std::string, std::vector<std::pair<std::string, std::string>>> &netlist,
           const std::map<std::string, uint32_t> &track_mode);
 
-    // partition
-    std::vector<Edge *> partition(uint32_t max_partition_size);
-
     // these two functions are expensive, only used for debugging
     [[nodiscard]] Vertex *vertex(const std::string &name) const;
     [[nodiscard]] Port *port(const std::string &vertex_name, const std::string &port_name) const;
@@ -51,6 +48,9 @@ public:
 
     [[nodiscard]] uint64_t vertex_count() const { return vertices_.size(); }
 
+    [[nodiscard]] const std::unordered_set<const Port *> &inputs();
+    [[nodiscard]] const std::unordered_set<const Port *> &outputs();
+
 private:
     // memory storage
     std::vector<std::unique_ptr<Edge>> edges_;
@@ -61,6 +61,9 @@ private:
                    std::map<std::pair<std::string, std::string>, Port *> &port_to_ptr,
                    std::map<std::string, Vertex *> &vertex_to_ptr);
     Edge *connect(Port *from, Port *to);
+
+    std::unordered_set<const Port *> inputs_;
+    std::unordered_set<const Port *> outputs_;
 };
 
 struct Edge {
@@ -85,6 +88,7 @@ struct Vertex {
 
 struct Port {
     std::string name;
+    uint32_t width;
 
     Vertex *vertex = nullptr;
 };
@@ -104,7 +108,7 @@ struct SuperEdge {
 
 class MultiGraph {
 public:
-    MultiGraph(const Graph *graph, uint32_t target_wave);
+    MultiGraph(Graph *graph, uint32_t target_wave);
 
     void inline delete_vertex(SuperVertex *vertex);
     void delete_edge(SuperEdge *edge);
@@ -123,11 +127,11 @@ public:
     [[nodiscard]] uint64_t num_wave_edges() const { return wave_edges_.size(); }
     [[nodiscard]] uint64_t num_non_wave_edges() const { return non_wave_edges_.size(); }
 
-    [[nodiscard]] std::unordered_set<Port *> edges_to_cut() const;
-    [[nodiscard]] uint64_t score() const;
-
     [[maybe_unused]] void print_graph() const;
-    [[nodiscard]] uint32_t target_wave_num() const { return target_wave_; }
+    [[maybe_unused]] [[nodiscard]] uint32_t target_wave_num() const { return target_wave_; }
+
+    [[nodiscard]] const std::unordered_set<const Port *> &inputs() { return graph_->inputs(); }
+    [[nodiscard]] const std::unordered_set<const Port *> &outputs() { return graph_->outputs(); }
 
 private:
     // memory holder
@@ -147,6 +151,8 @@ private:
 
     SuperVertex *get_new_vertex(uint32_t wave_number);
     SuperEdge *get_new_edge();
+
+    Graph *graph_;
 };
 
 class SuperVertex {
@@ -156,11 +162,6 @@ public:
     std::unordered_set<SuperEdge *> edges_from;
 
     uint32_t wave_number;
-
-    SuperVertex(MultiGraph *graph) : graph_(graph) {}
-
-private:
-    MultiGraph *graph_;
 };
 
 class CutResult {
@@ -170,19 +171,23 @@ public:
 
     [[nodiscard]] uint32_t score() const;
 
-    [[nodiscard]] std::unordered_set<Port*> get_ports() const;
+    [[nodiscard]] std::unordered_set<Port *> get_ports() const;
 
 private:
     std::pair<std::unordered_set<const Vertex *>, std::unordered_set<const Vertex *>> separators_;
     std::unordered_set<const Edge *> edges_;
 
     uint32_t targeted_wave_;
+
+    std::unordered_set<const Port *> inputs_;
+    std::unordered_set<const Port *> outputs_;
 };
 
 // compute the partition size
 std::vector<std::pair<uint32_t, int>> compute_cut_groups(const std::map<int, uint64_t> &edge_sizes,
                                                          int partition_size);
 
-bool has_path(const Port *from, const Port *to);
+bool has_path(const Port *from, const Port *to, const std::unordered_set<const Edge *> &null_set);
+inline bool has_path(const Port *from, const Port *to) { return has_path(from, to, {}); }
 
 #endif  // VIRTUALIZATION_GRAPH_HH

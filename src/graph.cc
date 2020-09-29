@@ -27,11 +27,13 @@ Graph::Graph(const std::map<std::string, std::vector<std::pair<std::string, std:
         auto const &src = net[0];
         auto src_port = get_port(src, port_to_ptr, vertex_to_ptr);
         auto width = track_mode.at(net_id);
+        src_port->width = width;
 
         for (uint64_t i = 1; i < net.size(); i++) {
             // convert the hyperedge into a digraph
             auto const &sink = net[i];
             auto sink_port = get_port(sink, port_to_ptr, vertex_to_ptr);
+            sink_port->width = width;
             // connect the ports
             auto edge = connect(src_port, sink_port);
             edge->width = width;
@@ -191,10 +193,10 @@ void Graph::remove_vertices(const std::vector<const Vertex *> &vertices) {
     }
 }
 
-void Graph::compute_data_wave() {
-    // we hardcoded some coded some blk types here
-    const static std::unordered_set<char> io_vertex = {'i', 'I'};
+// we hardcoded some coded some blk types here
+const static std::unordered_set<char> io_vertex = {'i', 'I'};
 
+void Graph::compute_data_wave() {
     std::unordered_set<Vertex *> visited;
 
     // start searching from the vertices
@@ -244,12 +246,29 @@ Port *Graph::port(const std::string &vertex_name, const std::string &port_name) 
     return nullptr;
 }
 
-std::vector<Edge *> Graph::partition(uint32_t max_partition_size) {
-    // for PnR's purpose, given a max size, usually can do a good job around 80%-90% usage
-    // we use 0.8 here just to do a approximation
-    (void)max_partition_size;
+const std::unordered_set<const Port *> &Graph::inputs() {
+    // use cache for speed up
+    if (inputs_.empty()) {
+        for (auto const &v : vertices_) {
+            if (io_vertex.find(v->name[0]) == io_vertex.end()) continue;
+            if (v->edges_from.empty()) {
+                for (auto const &iter : v->ports) inputs_.emplace(iter.second);
+            }
+        }
+    }
+    return inputs_;
+}
 
-    return {};
+const std::unordered_set<const Port *> &Graph::outputs() {
+    if (outputs_.empty()) {
+        for (auto const &v : vertices_) {
+            if (io_vertex.find(v->name[0]) == io_vertex.end()) continue;
+            if (v->edges_to.empty()) {
+                for (auto const &iter : v->ports) outputs_.emplace(iter.second);
+            }
+        }
+    }
+    return outputs_;
 }
 
 std::vector<std::pair<uint32_t, int>> compute_cut_groups(const std::map<int, uint64_t> &edge_sizes,
@@ -275,7 +294,7 @@ std::vector<std::pair<uint32_t, int>> compute_cut_groups(const std::map<int, uin
     return cut_wave_numbers;
 }
 
-bool has_path(const Port *from, const Port *to) {
+bool has_path(const Port *from, const Port *to, const std::unordered_set<const Edge *> &null_set) {
     // depth first search
     std::queue<const Port *> working_set;
     std::unordered_set<const Port *> visited;
@@ -288,6 +307,7 @@ bool has_path(const Port *from, const Port *to) {
         visited.emplace(from);
         auto const *v = port->vertex;
         for (auto const *e : v->edges_to) {
+            if (null_set.find(e) != null_set.end()) continue;
             auto const *p = e->to;
             if (p == to) return true;
             if (visited.find(p) == visited.end()) {
@@ -298,7 +318,8 @@ bool has_path(const Port *from, const Port *to) {
     return false;
 }
 
-MultiGraph::MultiGraph(const Graph *graph, uint32_t target_wave) : target_wave_(target_wave) {
+MultiGraph::MultiGraph(Graph *graph, uint32_t target_wave)
+    : target_wave_(target_wave), graph_(graph) {
     auto edges = graph->get_edges([](const Edge *) { return true; });
     // copy the connections over
     // this is necessary because we don't want to make any changes to the original graph
@@ -329,12 +350,12 @@ MultiGraph::MultiGraph(const Graph *graph, uint32_t target_wave) : target_wave_(
         s_e->edges.emplace(edge);
         s_from->edges_to.emplace(s_e);
         s_to->edges_from.emplace(s_e);
-        s_e->wave_number = edge->wave_number;
 
         // parent
         edge_find_[edge] = s_e;
 
-        if (edge->to->vertex->wave_number == target_wave_ || edge->from->vertex->wave_number) {
+        if (edge->to->vertex->wave_number == target_wave_ ||
+            edge->from->vertex->wave_number == target_wave_) {
             wave_edges_.emplace_back(edge);
         } else {
             non_wave_edges_.emplace_back(edge);
@@ -344,7 +365,7 @@ MultiGraph::MultiGraph(const Graph *graph, uint32_t target_wave) : target_wave_(
 }
 
 SuperVertex *MultiGraph::get_new_vertex(uint32_t wave_number) {
-    auto v = std::make_shared<SuperVertex>(this);
+    auto v = std::make_shared<SuperVertex>();
     if (wave_number == target_wave_)
         wave_vertices_.emplace(v.get());
     else
@@ -553,7 +574,7 @@ void MultiGraph::merge(SuperVertex *a, SuperVertex *b) {
     }
 
     // sanity check
-    if constexpr (verify_algorithm) {   // NOLINT
+    if constexpr (verify_algorithm) {  // NOLINT
         uint64_t new_edge_count = 0;
         for (auto const &iter : edges_) {
             new_edge_count += iter.first->edges.size();
@@ -570,25 +591,8 @@ void MultiGraph::merge(SuperVertex *a, SuperVertex *b) {
         }
     }
 
-
     delete_vertex(a);
     delete_vertex(b);
-}
-
-std::unordered_set<Port *> MultiGraph::edges_to_cut() const {
-    std::unordered_set<Port *> result;
-    for (auto iter : edges_) {
-        for (auto const *edge : iter.first->edges) {
-            result.emplace(edge->from);
-        }
-    }
-
-    return result;
-}
-
-uint64_t MultiGraph::score() const {
-    auto edges = edges_to_cut();
-    return edges.size();
 }
 
 void MultiGraph::print_graph() const {
@@ -605,7 +609,10 @@ void MultiGraph::print_graph() const {
     std::cout << "---------------------" << std::endl;
 }
 
-CutResult::CutResult(MultiGraph *graph) : targeted_wave_(graph->target_wave_num()) {
+CutResult::CutResult(MultiGraph *graph)
+    : targeted_wave_(graph->target_wave_num()),
+      inputs_(graph->inputs()),
+      outputs_(graph->outputs()) {
     auto edges = graph->edges();
     for (auto const *e : edges) {
         for (auto const *edge : e->edges) {
@@ -618,18 +625,23 @@ CutResult::CutResult(MultiGraph *graph) : targeted_wave_(graph->target_wave_num(
 }
 
 uint32_t CutResult::score() const {
-    // we want an evenly cut result?
-    auto size = std::max(separators_.first.size(), separators_.second.size());
-    auto ratio = static_cast<float>(size) / (separators_.first.size() + separators_.second.size());
-    ratio = 0.5 / (1 - ratio);
-    uint32_t s = static_cast<uint32_t>(ratio);
+    // we need to make sure that the cut will actually prevent the flow
+    // we assume it's a connected graph where the inputs can always goes to the outputs
+    uint32_t s = 0;
+    for (auto *in : inputs_) {
+        for (auto *out : outputs_) {
+            if (in->width != out->width) continue;
+            if (has_path(in, out, edges_)) {
+                s += 100;
+            }
+        }
+    }
     // we cannot cut not in the targeted wave
     for (auto *e : edges_) {
         if (e->wave_number != targeted_wave_ && e->to->vertex->wave_number != targeted_wave_)
             s += 100;
     }
-    auto ports = get_ports();
-    return s + ports.size();
+    return s + static_cast<uint32_t>(get_ports().size());
 }
 
 std::unordered_set<Port *> CutResult::get_ports() const {
