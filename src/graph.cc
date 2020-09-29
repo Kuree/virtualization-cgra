@@ -15,6 +15,8 @@
 
 using fmt::format;
 
+constexpr bool verify_algorithm = false;
+
 Graph::Graph(const std::map<std::string, std::vector<std::pair<std::string, std::string>>> &netlist,
              const std::map<std::string, uint32_t> &track_mode) {
     // need to maintain some temp data structures for lookup
@@ -447,9 +449,12 @@ struct pair_hash {
 void MultiGraph::merge(SuperVertex *a, SuperVertex *b) {
     // check before and after size
     uint64_t edge_count = 0;
-    for (auto const &iter : edges_) {
-        edge_count += iter.first->edges.size();
+    if constexpr (verify_algorithm) {  // NOLINT
+        for (auto const &iter : edges_) {
+            edge_count += iter.first->edges.size();
+        }
     }
+
     // this will delete both vertex a and b
     // simple way to merge, maybe use set union?
     // brute force
@@ -501,7 +506,8 @@ void MultiGraph::merge(SuperVertex *a, SuperVertex *b) {
         }
     }
     // check backward loop
-    std::unordered_map<std::pair<SuperVertex *, SuperVertex *>, std::pair<SuperVertex *, SuperVertex *>, pair_hash>
+    std::unordered_map<std::pair<SuperVertex *, SuperVertex *>,
+                       std::pair<SuperVertex *, SuperVertex *>, pair_hash>
         loop_map;
     for (auto &iter : connection_map) {
         auto &p = iter.first;
@@ -547,20 +553,23 @@ void MultiGraph::merge(SuperVertex *a, SuperVertex *b) {
     }
 
     // sanity check
-    uint64_t new_edge_count = 0;
-    for (auto const &iter : edges_) {
-        new_edge_count += iter.first->edges.size();
-    }
-    assert((new_edge_count + num_self_loop) == edge_count);
-    auto es = this->edges();
-    for (auto *edge : es) {
-        if (edge->to == b || edge->from == b) {
-            throw std::runtime_error("invalid state");
+    if constexpr (verify_algorithm) {   // NOLINT
+        uint64_t new_edge_count = 0;
+        for (auto const &iter : edges_) {
+            new_edge_count += iter.first->edges.size();
         }
-        if (edge->to == edge->from) {
-            throw std::runtime_error("invalid state");
+        assert((new_edge_count + num_self_loop) == edge_count);
+        auto es = this->edges();
+        for (auto *edge : es) {
+            if (edge->to == b || edge->from == b) {
+                throw std::runtime_error("invalid state");
+            }
+            if (edge->to == edge->from) {
+                throw std::runtime_error("invalid state");
+            }
         }
     }
+
 
     delete_vertex(a);
     delete_vertex(b);
