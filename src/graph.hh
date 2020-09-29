@@ -75,6 +75,8 @@ struct Vertex {
 
     std::vector<Edge *> edges_to;
     std::vector<Edge *> edges_from;
+
+    uint32_t wave_number;
 };
 
 struct Port {
@@ -120,24 +122,26 @@ public:
     [[nodiscard]] std::unordered_set<Port *> edges_to_cut() const;
     [[nodiscard]] uint64_t score() const;
 
+    void print_graph() const;
+
 private:
     // memory holder
     std::unordered_map<SuperVertex *, std::shared_ptr<SuperVertex>> vertices_;
     std::unordered_map<SuperEdge *, std::shared_ptr<SuperEdge>> edges_;
 
     // these are designed to speed up the merge process
-    std::vector<SuperEdge *> non_wave_edges_;
-    std::vector<SuperEdge *> wave_edges_;
-
-    // used for lookup
-    std::unordered_set<Edge *, SuperEdge *> edges_map_;
+    std::vector<const Edge *> non_wave_edges_;
+    std::vector<const Edge *> wave_edges_;
+    std::unordered_set<SuperVertex*> non_wave_vertices_;
+    std::unordered_set<SuperVertex*> wave_vertices_;
+    // union find
+    std::unordered_map<const Edge*, SuperEdge*> edge_find_;
+    std::unordered_set<const Edge *> non_wave_edges_set_;
 
     uint32_t target_wave_;
 
-    SuperVertex *get_new_vertex();
-    SuperEdge *get_new_edge(uint32_t wave_number);
-
-    void reassign_wave(SuperEdge* target, SuperEdge* base);
+    SuperVertex *get_new_vertex(uint32_t wave_number);
+    SuperEdge *get_new_edge();
 
 };
 
@@ -146,6 +150,8 @@ public:
     std::unordered_set<const Vertex *> vertices;
     std::unordered_set<SuperEdge *> edges_to;
     std::unordered_set<SuperEdge *> edges_from;
+
+    uint32_t wave_number;
 
     SuperVertex(MultiGraph *graph) : graph_(graph) {}
 
