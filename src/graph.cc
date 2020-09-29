@@ -647,7 +647,7 @@ CutResult Netlist::partition(uint32_t wave_number) {
 
     CutResult result;
     uint32_t score = 0xFFFFFFFF;
-    for (uint32_t i = 0; i < graph_->vertex_count() * graph_->vertex_count(); i++) {
+    for (uint32_t i = 0; i < graph_->vertex_count() * graph_->vertex_count() / 4; i++) {
         MultiGraph mg(graph_.get(), wave_number);
         mg.merge(i);
         CutResult r(&mg);
