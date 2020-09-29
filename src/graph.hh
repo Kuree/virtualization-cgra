@@ -48,8 +48,10 @@ public:
 
     [[nodiscard]] uint64_t vertex_count() const { return vertices_.size(); }
 
-    [[nodiscard]] const std::unordered_set<const Port *> &inputs();
-    [[nodiscard]] const std::unordered_set<const Port *> &outputs();
+    [[nodiscard]] const std::unordered_set<const Port *> &inputs() const { return inputs_; }
+    [[nodiscard]] const std::unordered_set<const Port *> &outputs() const { return outputs_; }
+
+    void identify_io();
 
 private:
     // memory storage
@@ -64,6 +66,7 @@ private:
 
     std::unordered_set<const Port *> inputs_;
     std::unordered_set<const Port *> outputs_;
+
 };
 
 struct Edge {
@@ -108,7 +111,7 @@ struct SuperEdge {
 
 class MultiGraph {
 public:
-    MultiGraph(Graph *graph, uint32_t target_wave);
+    MultiGraph(const Graph *graph, uint32_t target_wave);
 
     void inline delete_vertex(SuperVertex *vertex);
     void delete_edge(SuperEdge *edge);
@@ -152,7 +155,7 @@ private:
     SuperVertex *get_new_vertex(uint32_t wave_number);
     SuperEdge *get_new_edge();
 
-    Graph *graph_;
+    const Graph *graph_;
 };
 
 class SuperVertex {

@@ -39,6 +39,9 @@ Graph::Graph(const std::map<std::string, std::vector<std::pair<std::string, std:
             edge->width = width;
         }
     }
+
+    // compute inputs and outputs
+    identify_io();
 }
 
 Edge *Graph::connect(Port *from, Port *to) {
@@ -246,29 +249,17 @@ Port *Graph::port(const std::string &vertex_name, const std::string &port_name) 
     return nullptr;
 }
 
-const std::unordered_set<const Port *> &Graph::inputs() {
-    // use cache for speed up
-    if (inputs_.empty()) {
-        for (auto const &v : vertices_) {
-            if (io_vertex.find(v->name[0]) == io_vertex.end()) continue;
-            if (v->edges_from.empty()) {
-                for (auto const &iter : v->ports) inputs_.emplace(iter.second);
-            }
+void Graph::identify_io() {
+    inputs_.clear();
+    outputs_.clear();
+    for (auto const &v : vertices_) {
+        if (io_vertex.find(v->name[0]) == io_vertex.end()) continue;
+        if (v->edges_from.empty()) {
+            for (auto const &iter : v->ports) inputs_.emplace(iter.second);
         }
+        if (v->edges_to.empty())
+            for (auto const &iter : v->ports) outputs_.emplace(iter.second);
     }
-    return inputs_;
-}
-
-const std::unordered_set<const Port *> &Graph::outputs() {
-    if (outputs_.empty()) {
-        for (auto const &v : vertices_) {
-            if (io_vertex.find(v->name[0]) == io_vertex.end()) continue;
-            if (v->edges_to.empty()) {
-                for (auto const &iter : v->ports) outputs_.emplace(iter.second);
-            }
-        }
-    }
-    return outputs_;
 }
 
 std::vector<std::pair<uint32_t, int>> compute_cut_groups(const std::map<int, uint64_t> &edge_sizes,
@@ -318,7 +309,7 @@ bool has_path(const Port *from, const Port *to, const std::unordered_set<const E
     return false;
 }
 
-MultiGraph::MultiGraph(Graph *graph, uint32_t target_wave)
+MultiGraph::MultiGraph(const Graph *graph, uint32_t target_wave)
     : target_wave_(target_wave), graph_(graph) {
     auto edges = graph->get_edges([](const Edge *) { return true; });
     // copy the connections over
@@ -419,7 +410,7 @@ void MultiGraph::merge(uint32_t seed) {
         if (!non_wave_edges_set_.empty()) {
             std::uniform_int_distribution<uint32_t> distrib(0, non_wave_edges_.size() - 1);
             // pick an edge from non-wave edges
-            SuperEdge *target = nullptr;
+            SuperEdge *target;
             do {
                 uint32_t index = distrib(gen);
                 auto edge = non_wave_edges_[index];
@@ -428,7 +419,7 @@ void MultiGraph::merge(uint32_t seed) {
             merge(target);
         } else {
             std::uniform_int_distribution<uint32_t> distrib(0, wave_edges_.size() - 1);
-            SuperEdge *target = nullptr;
+            SuperEdge *target;
             do {
                 uint32_t index = distrib(gen);
                 auto edge = wave_edges_[index];

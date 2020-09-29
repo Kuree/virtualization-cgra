@@ -22,4 +22,6 @@ void remove_reset(Graph *graph) {
         }
     }
     graph->remove_vertices({reset_input});
+
+    graph->identify_io();
 }
