@@ -8,10 +8,8 @@ endforeach ()
 
 add_executable(test_io test_io.cc)
 target_link_libraries(test_io gtest virtualization gtest_main)
-gtest_discover_tests(test_io
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/vectors)
+gtest_discover_tests(test_io)
 
 add_executable(test_graph test_graph.cc)
 target_link_libraries(test_graph gtest virtualization gtest_main)
-gtest_discover_tests(test_graph
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/vectors)
+gtest_discover_tests(test_graph)
