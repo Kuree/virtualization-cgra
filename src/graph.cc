@@ -3,13 +3,15 @@
 #include <fmt/format.h>
 
 #include <cassert>
+#include <iostream>
 #include <queue>
 #include <random>
 #include <set>
 #include <sstream>
 #include <unordered_map>
 #include <unordered_set>
-#include <iostream>
+
+#include "pass.hh"
 
 using fmt::format;
 
@@ -568,16 +570,69 @@ uint64_t MultiGraph::score() const {
 }
 
 void MultiGraph::print_graph() const {
-    for (auto const &iter: vertices_) {
+    for (auto const &iter : vertices_) {
         auto *p = iter.first;
         std::cout << ::format("Vertex: 0x{0:X} ", (uint64_t)p);
-        for (auto v: p->vertices) std::cout << " " << v->name;
+        for (auto v : p->vertices) std::cout << " " << v->name;
         std::cout << std::endl;
         std::cout << "   Connections: ";
-        for (auto e: p->edges_to)
-            std::cout << ::format(" 0x{0:X}", (uint64_t)e->to);
+        for (auto e : p->edges_to) std::cout << ::format(" 0x{0:X}", (uint64_t)e->to);
         std::cout << std::endl;
     }
 
     std::cout << "---------------------" << std::endl;
+}
+
+CutResult::CutResult(MultiGraph *graph) : targeted_wave_(graph->target_wave_num()) {
+    auto edges = graph->edges();
+    for (auto const *e : edges) {
+        for (auto const *edge : e->edges) {
+            edges_.emplace(edge);
+        }
+    }
+    auto vertices = graph->vertices();
+    if (vertices.size() != 2) throw std::runtime_error("Graph not cut properly");
+    separators_ = std::make_pair(vertices[0]->vertices, vertices[1]->vertices);
+}
+
+uint32_t CutResult::score() const {
+    // we want an evenly cut result?
+    auto size = std::max(separators_.first.size(), separators_.second.size());
+    auto ratio = static_cast<float>(size) / (separators_.first.size() + separators_.second.size());
+    ratio = 0.5 / (1 - ratio);
+    uint32_t s = static_cast<uint32_t>(ratio);
+    // we cannot cut not in the targeted wave
+    for (auto *e : edges_) {
+        if (e->wave_number != targeted_wave_ && e->to->vertex->wave_number != targeted_wave_)
+            s += 100;
+    }
+    auto ports = get_ports();
+    return s + ports.size();
+}
+
+std::unordered_set<Port *> CutResult::get_ports() const {
+    std::unordered_set<Port*> ports;
+    for (auto *e: edges_)
+        ports.emplace(e->from);
+    return ports;
+}
+
+CutResult Netlist::partition(uint32_t wave_number) {
+    remove_reset(graph_.get());
+    graph_->compute_data_wave();
+
+    CutResult result;
+    uint32_t score = 0xFFFFFFFF;
+    for (uint32_t i = 0; i < graph_->vertex_count() * graph_->vertex_count(); i++) {
+        MultiGraph mg(graph_.get(), wave_number);
+        mg.merge(i);
+        CutResult r(&mg);
+        auto s = r.score();
+        if (s < score) {
+            score = s;
+            result = r;
+        }
+    }
+
+    return result;
 }

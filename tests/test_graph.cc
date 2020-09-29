@@ -97,4 +97,15 @@ TEST(multi_graph, merge_cascade_wave) {
     EXPECT_EQ(edges.size(), 1);
     auto g_edges = edges[0]->edges;
     EXPECT_EQ(g_edges.size(), 2);
+
+    auto result = CutResult(&mg);
+    auto score = result.score();
+    EXPECT_TRUE(score > 10);
+}
+
+TEST(netlist, partition) {
+    auto netlist = load_netlist("cascade.packed");
+    auto result = netlist->partition(2);
+    auto ports = result.get_ports();
+    EXPECT_EQ(ports.size(), 1);
 }

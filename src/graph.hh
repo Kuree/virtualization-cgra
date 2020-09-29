@@ -4,19 +4,21 @@
 #include <functional>
 #include <map>
 #include <memory>
+#include <set>
 #include <string>
 #include <unordered_set>
 #include <vector>
-#include <set>
 
 struct Edge;
 struct Vertex;
 struct Port;
 class Graph;
+class CutResult;
 
 class Netlist {
 public:
     explicit Netlist(std::shared_ptr<Graph> graph) : graph_(std::move(graph)) {}
+    CutResult partition(uint32_t wave_number);
 
     [[nodiscard]] Graph *graph() const { return graph_.get(); }
 
@@ -46,6 +48,8 @@ public:
         const std::function<bool(const Vertex *)> &predicate);
     void remove_edges(const std::vector<const Edge *> &edges);
     void remove_vertices(const std::vector<const Vertex *> &vertices);
+
+    [[nodiscard]] uint64_t vertex_count() const { return vertices_.size(); }
 
 private:
     // memory storage
@@ -122,7 +126,8 @@ public:
     [[nodiscard]] std::unordered_set<Port *> edges_to_cut() const;
     [[nodiscard]] uint64_t score() const;
 
-    void print_graph() const;
+    [[maybe_unused]] void print_graph() const;
+    [[nodiscard]] uint32_t target_wave_num() const { return target_wave_; }
 
 private:
     // memory holder
@@ -132,17 +137,16 @@ private:
     // these are designed to speed up the merge process
     std::vector<const Edge *> non_wave_edges_;
     std::vector<const Edge *> wave_edges_;
-    std::unordered_set<SuperVertex*> non_wave_vertices_;
-    std::unordered_set<SuperVertex*> wave_vertices_;
+    std::unordered_set<SuperVertex *> non_wave_vertices_;
+    std::unordered_set<SuperVertex *> wave_vertices_;
     // union find
-    std::unordered_map<const Edge*, SuperEdge*> edge_find_;
+    std::unordered_map<const Edge *, SuperEdge *> edge_find_;
     std::unordered_set<const Edge *> non_wave_edges_set_;
 
     uint32_t target_wave_;
 
     SuperVertex *get_new_vertex(uint32_t wave_number);
     SuperEdge *get_new_edge();
-
 };
 
 class SuperVertex {
@@ -157,6 +161,22 @@ public:
 
 private:
     MultiGraph *graph_;
+};
+
+class CutResult {
+public:
+    CutResult(MultiGraph *graph);
+    CutResult() = default;
+
+    [[nodiscard]] uint32_t score() const;
+
+    [[nodiscard]] std::unordered_set<Port*> get_ports() const;
+
+private:
+    std::pair<std::unordered_set<const Vertex *>, std::unordered_set<const Vertex *>> separators_;
+    std::unordered_set<const Edge *> edges_;
+
+    uint32_t targeted_wave_;
 };
 
 // compute the partition size
