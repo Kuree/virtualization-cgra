@@ -11,4 +11,6 @@ std::unordered_set<const Port*> get_reset_ports(Graph *graph);
 // reset will be inserted later at each stage
 void remove_reset(Graph *graph);
 
+void set_const_pe_wave(Graph* graph);
+
 #endif  // VIRTUALIZATION_PASS_HH

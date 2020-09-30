@@ -119,3 +119,17 @@ TEST(netlist, partition_cascade) {
     auto p = *ports.begin();
     EXPECT_EQ(p->vertex->name, "p8");
 }
+
+TEST(netlist, partition_resnet_b2b) {
+    auto netlist = load_netlist("resnet_b2b.packed");
+    auto result = netlist->partition(3);
+    auto ports = result.get_ports();
+    EXPECT_EQ(ports.size(), 2);
+}
+
+TEST(netlist, partition_camera_pipeline) {
+    auto netlist = load_netlist("camera_pipeline.packed");
+    auto result = netlist->partition(3);
+    auto ports = result.get_ports();
+    EXPECT_EQ(ports.size(), 2);
+}

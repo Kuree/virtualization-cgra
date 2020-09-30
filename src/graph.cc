@@ -96,8 +96,7 @@ void label_edge_data_wave(Vertex *vertex, uint32_t wave_number,
         if (next_wave_number > edge->wave_number) edge->wave_number = next_wave_number;
         auto v = edge->to->vertex;
         // prevent loop
-        if (visited.find(v) != visited.end())
-            continue;
+        if (visited.find(v) != visited.end()) continue;
         // recursive call
         label_edge_data_wave(v, next_wave_number, visited);
     }
@@ -125,10 +124,10 @@ std::string Graph::dump_dot_graph() const {
     return stream.str();
 }
 
-std::vector<const Edge *> Graph::get_edges(
+std::vector<Edge *> Graph::get_edges(
     const std::function<bool(const Edge *)> &predicate) const {
-    std::vector<const Edge *> result;
-    for (auto const &edge : edges_) {
+    std::vector<Edge *> result;
+    for (auto &edge : edges_) {
         if (predicate(edge.get())) {
             result.emplace_back(edge.get());
         }
@@ -222,11 +221,15 @@ void Graph::compute_data_wave() {
             v->wave_number = v->edges_to[0]->wave_number;
     }
 
+    // some cases we have const PE driving MEM tiles
+    set_const_pe_wave(this);
+
     // sanity check
     for (auto const &edge : edges_) {
         if (!edge->valid)
-            throw std::runtime_error(
-                ::format("Invalid edge: {0} -> {1}", edge->from->name, edge->to->name));
+            throw std::runtime_error(::format("Invalid edge: {0}.{1} -> {2}.{3}",
+                                              edge->from->vertex->name, edge->from->name,
+                                              edge->to->vertex->name, edge->to->name));
     }
 }
 
@@ -295,15 +298,14 @@ bool has_path(const Port *from, const Port *to, const std::unordered_set<const E
     while (!working_set.empty()) {
         auto const *port = working_set.front();
         working_set.pop();
-        visited.emplace(from);
+        if (visited.find(port) != visited.end()) continue;
+        visited.emplace(port);
         auto const *v = port->vertex;
         for (auto const *e : v->edges_to) {
             if (null_set.find(e) != null_set.end()) continue;
             auto const *p = e->to;
             if (p == to) return true;
-            if (visited.find(p) == visited.end()) {
-                working_set.emplace(p);
-            }
+            if (visited.find(p) == visited.end()) working_set.emplace(p);
         }
     }
     return false;

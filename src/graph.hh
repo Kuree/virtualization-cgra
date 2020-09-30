@@ -40,7 +40,7 @@ public:
 
     [[nodiscard]] std::string dump_dot_graph() const;
 
-    std::vector<const Edge *> get_edges(const std::function<bool(const Edge *)> &predicate) const;
+    std::vector<Edge *> get_edges(const std::function<bool(const Edge *)> &predicate) const;
     [[maybe_unused]] std::vector<const Vertex *> get_vertices(
         const std::function<bool(const Vertex *)> &predicate);
     void remove_edges(const std::vector<const Edge *> &edges);

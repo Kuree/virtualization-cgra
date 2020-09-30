@@ -1,0 +1,1088 @@
+Netlists:
+e0: (p1, alu_res)	(p0, data0)
+e1: (p0, alu_res)	(p506, data0)
+e2: (r291, reg)	(p1, data0)	(p3, data0)	(p5, data0)	(p7, data0)	(p9, data1)	(p13, data1)	(p19, data1)	(p25, data0)	(p27, data0)	(p29, data0)	(p31, data0)	(p33, data0)	(p35, data0)	(p37, data0)	(p39, data0)	(p41, data1)	(p45, data1)	(p51, data1)	(p57, data0)	(p58, data0)	(p59, data0)	(p60, data0)	(p61, data0)	(p62, data0)	(p63, data0)	(p71, data1)	(p91, data0)	(p92, data0)	(p93, data0)	(p94, data0)	(p99, data0)	(p100, data0)	(p101, data0)	(p102, data0)	(p103, data0)	(p104, data0)	(p105, data1)	(p108, data1)	(p121, data1)	(p449, data1)	(p456, data0)	(p457, data1)	(p461, data0)	(r292, reg)
+e3: (r292, reg)	(p1, data1)	(p25, data1)	(p33, data1)	(p41, data0)	(p43, data0)	(p47, data1)	(p53, data1)	(p57, data1)	(p91, data1)	(p99, data1)	(p105, data0)	(p106, data0)	(p109, data1)	(p122, data1)
+e4: (p3, alu_res)	(p2, data0)
+e5: (p2, alu_res)	(p506, data1)
+e6: (r289, reg)	(p3, data1)	(p27, data1)	(p35, data1)	(p45, data0)	(p47, data0)	(p49, data0)	(p55, data1)	(p58, data1)	(p92, data1)	(p100, data1)	(p108, data0)	(p109, data0)	(p110, data0)	(p111, data0)	(r290, reg)
+e7: (p5, alu_res)	(p4, data0)
+e8: (p4, alu_res)	(p507, data0)
+e9: (m297, data_out_0)	(p5, data1)	(p9, data0)	(p11, data0)	(p15, data1)	(p21, data1)	(p29, data1)	(p37, data1)	(p59, data1)	(p68, data0)	(p69, data0)	(p72, data1)	(p93, data1)	(p103, data1)	(r291, reg)	(m301, data_in_0)
+e10: (p7, alu_res)	(p6, data0)
+e11: (p6, alu_res)	(p507, data1)
+e12: (r293, reg)	(p7, data1)	(p13, data0)	(p15, data0)	(p17, data0)	(p23, data1)	(p31, data1)	(p39, data1)	(p60, data1)	(p71, data0)	(p72, data0)	(p73, data0)	(p74, data0)	(p94, data1)	(p104, data1)	(r294, reg)
+e13: (p9, alu_res)	(p8, data0)
+e14: (p8, alu_res)	(p509, data0)
+e15: (p11, alu_res)	(p10, data0)
+e16: (p10, alu_res)	(p509, data1)
+e17: (p523, alu_res)	(p11, data1)	(p49, data1)	(p68, data1)	(p110, data1)	(r289, reg)	(m297, data_in_0)
+e18: (p13, alu_res)	(p12, data0)
+e19: (p12, alu_res)	(p508, data1)
+e20: (p15, alu_res)	(p14, data0)
+e21: (p14, alu_res)	(p510, data1)
+e22: (p17, alu_res)	(p16, data0)
+e23: (p16, alu_res)	(p508, data0)
+e24: (r294, reg)	(p17, data1)	(p43, data1)	(p73, data1)	(p106, data1)
+e25: (p19, alu_res)	(p18, data0)
+e26: (p18, alu_res)	(p510, data0)
+e27: (m301, data_out_0)	(p19, data0)	(p21, data0)	(p23, data0)	(p63, data1)	(p69, data1)	(p74, data1)	(r293, reg)
+e28: (p21, alu_res)	(p20, data0)
+e29: (p20, alu_res)	(p511, data1)
+e30: (p23, alu_res)	(p22, data0)
+e31: (p22, alu_res)	(p511, data0)
+e32: (p25, alu_res)	(p24, data0)
+e33: (p24, alu_res)	(p512, data0)
+e34: (p27, alu_res)	(p26, data0)
+e35: (p26, alu_res)	(p512, data1)
+e36: (p29, alu_res)	(p28, data0)
+e37: (p28, alu_res)	(p513, data0)
+e38: (p31, alu_res)	(p30, data0)
+e39: (p30, alu_res)	(p513, data1)
+e40: (p33, alu_res)	(p32, data0)
+e41: (p32, alu_res)	(p514, data0)
+e42: (p35, alu_res)	(p34, data0)
+e43: (p34, alu_res)	(p514, data1)
+e44: (p37, alu_res)	(p36, data0)
+e45: (p36, alu_res)	(p515, data0)
+e46: (p39, alu_res)	(p38, data0)
+e47: (p38, alu_res)	(p515, data1)
+e48: (p41, alu_res)	(p40, data0)
+e49: (p40, alu_res)	(p516, data0)
+e50: (p43, alu_res)	(p42, data0)
+e51: (p42, alu_res)	(p516, data1)
+e52: (p45, alu_res)	(p44, data0)
+e53: (p44, alu_res)	(p517, data1)
+e54: (p47, alu_res)	(p46, data0)
+e55: (p46, alu_res)	(p518, data1)
+e56: (p49, alu_res)	(p48, data0)
+e57: (p48, alu_res)	(p517, data0)
+e58: (p51, alu_res)	(p50, data0)
+e59: (p50, alu_res)	(p518, data0)
+e60: (r290, reg)	(p51, data0)	(p53, data0)	(p55, data0)	(p111, data1)	(p121, data0)	(p122, data0)
+e61: (p53, alu_res)	(p52, data0)
+e62: (p52, alu_res)	(p519, data1)
+e63: (p55, alu_res)	(p54, data0)
+e64: (p54, alu_res)	(p519, data0)
+e67: (p56, alu_res)	(p139, data1)	(p140, data1)	(p141, data1)
+e68: (p57, alu_res)	(p64, data0)
+e69: (p58, alu_res)	(p65, data0)
+e70: (p59, alu_res)	(p70, data0)
+e71: (p60, alu_res)	(p75, data0)
+e72: (p403, alu_res)	(p61, data1)	(p451, data0)	(p453, data0)
+e73: (p61, alu_res)	(p490, data0)
+e74: (p404, alu_res)	(p62, data1)	(p451, data1)
+e75: (p62, alu_res)	(p493, data0)
+e76: (p63, alu_res)	(p81, data0)
+e78: (p64, alu_res)	(p401, data0)
+e80: (p65, alu_res)	(p402, data0)
+e81: (p448, alu_res)	(p66, data0)	(p67, data0)	(p85, data1)
+e82: (p452, alu_res)	(p66, data1)	(p78, data0)
+e83: (p66, alu_res)	(p90, data0)
+e84: (p453, alu_res)	(p67, data1)	(p78, data1)
+e85: (p67, alu_res)	(p80, data0)
+e86: (p68, alu_res)	(p79, data0)
+e87: (p69, alu_res)	(p84, data0)
+e89: (p70, alu_res)	(p403, data0)
+e90: (p71, alu_res)	(p77, data0)
+e91: (p72, alu_res)	(p87, data0)
+e92: (p73, alu_res)	(p76, data0)
+e93: (p74, alu_res)	(p83, data0)
+e95: (p75, alu_res)	(p404, data0)
+e97: (p76, alu_res)	(p405, data0)
+e99: (p77, alu_res)	(p406, data0)
+e100: (p78, alu_res)	(p89, data0)
+e102: (p79, alu_res)	(p407, data0)
+e104: (p80, alu_res)	(p408, data0)
+e106: (p81, alu_res)	(p409, data0)
+e107: (p409, alu_res)	(p82, data0)
+e108: (p451, alu_res)	(p82, data1)	(p88, data1)
+e109: (p82, alu_res)	(p491, data0)
+e111: (p83, alu_res)	(p410, data0)
+e113: (p84, alu_res)	(p411, data0)
+e114: (p455, alu_res)	(p85, data0)
+e115: (p85, alu_res)	(p86, data0)
+e117: (p86, alu_res)	(p412, data0)
+e119: (p87, alu_res)	(p413, data0)
+e120: (p413, alu_res)	(p88, data0)
+e121: (p88, alu_res)	(p492, data0)
+e123: (p89, alu_res)	(p414, data0)
+e125: (p90, alu_res)	(p415, data0)
+e126: (p91, alu_res)	(p95, data0)
+e127: (p92, alu_res)	(p96, data0)
+e128: (p93, alu_res)	(p97, data0)
+e129: (p94, alu_res)	(p98, data0)
+e131: (p95, alu_res)	(p416, data0)
+e133: (p96, alu_res)	(p417, data0)
+e135: (p97, alu_res)	(p418, data0)
+e137: (p98, alu_res)	(p419, data0)
+e138: (p99, alu_res)	(p107, data0)
+e139: (p100, alu_res)	(p112, data0)
+e140: (p420, alu_res)	(p101, data1)	(p460, data0)
+e141: (p101, alu_res)	(p497, data0)
+e142: (p421, alu_res)	(p102, data1)	(p460, data1)	(p465, data1)
+e143: (p102, alu_res)	(p494, data0)
+e144: (p103, alu_res)	(p113, data0)
+e145: (p104, alu_res)	(p114, data0)
+e146: (p105, alu_res)	(p116, data0)
+e147: (p106, alu_res)	(p117, data0)
+e149: (p107, alu_res)	(p420, data0)
+e150: (p108, alu_res)	(p131, data0)
+e151: (p109, alu_res)	(p129, data0)
+e152: (p110, alu_res)	(p118, data0)
+e153: (p111, alu_res)	(p125, data0)
+e155: (p112, alu_res)	(p421, data0)
+e157: (p113, alu_res)	(p422, data0)
+e159: (p114, alu_res)	(p423, data0)
+e160: (p463, alu_res)	(p115, data0)	(p119, data1)	(p127, data1)
+e161: (p464, alu_res)	(p115, data1)	(p132, data1)
+e162: (p115, alu_res)	(p134, data0)
+e164: (p116, alu_res)	(p424, data0)
+e166: (p117, alu_res)	(p425, data0)
+e168: (p118, alu_res)	(p426, data0)
+e169: (p465, alu_res)	(p119, data0)
+e170: (p119, alu_res)	(p120, data0)
+e172: (p120, alu_res)	(p427, data0)
+e173: (p121, alu_res)	(p123, data0)
+e174: (p122, alu_res)	(p126, data0)
+e176: (p123, alu_res)	(p428, data0)
+e177: (p428, alu_res)	(p124, data0)
+e178: (p460, alu_res)	(p124, data1)	(p130, data1)
+e179: (p124, alu_res)	(p495, data0)
+e181: (p125, alu_res)	(p429, data0)
+e183: (p126, alu_res)	(p430, data0)
+e184: (p468, alu_res)	(p127, data0)
+e185: (p127, alu_res)	(p128, data0)
+e187: (p128, alu_res)	(p431, data0)
+e189: (p129, alu_res)	(p432, data0)
+e190: (p432, alu_res)	(p130, data0)
+e191: (p130, alu_res)	(p496, data0)
+e193: (p131, alu_res)	(p433, data0)
+e194: (p466, alu_res)	(p132, data0)
+e195: (p132, alu_res)	(p133, data0)
+e197: (p133, alu_res)	(p434, data0)
+e199: (p134, alu_res)	(p435, data0)
+e200: (p436, alu_res)	(p135, data0)
+e201: (p437, alu_res)	(p135, data1)
+e202: (p135, alu_res)	(p498, data0)
+e203: (p498, alu_res)	(p136, data0)
+e205: (p136, alu_res)	(p147, data0)
+e206: (p500, alu_res)	(p137, data0)
+e208: (p137, alu_res)	(p148, data0)
+e209: (p502, alu_res)	(p138, data0)
+e211: (p138, alu_res)	(p149, data0)
+e212: (r258, reg)	(p139, data0)	(p140, data0)	(p141, data0)	(p252, data0)	(p257, data1)
+e213: (p139, alu_res)	(p144, data0)
+e214: (p140, alu_res)	(p145, data0)
+e215: (p141, alu_res)	(p146, data0)
+e216: (r270, reg)	(p142, data0)	(p264, data0)	(p269, data1)
+e218: (p142, alu_res)	(p143, data0)
+e220: (p143, alu_res)	(p276, data0)
+e222: (p144, alu_res)	(p277, data0)
+e224: (p145, alu_res)	(p278, data0)
+e226: (p146, alu_res)	(p279, data0)
+e228: (p147, alu_res)	(p484, data0)	(p485, data0)
+e230: (p148, alu_res)	(p486, data0)	(p487, data0)
+e232: (p149, alu_res)	(p488, data0)	(p489, data0)
+e291: (p252, alu_res)	(p257, data0)	(p263, data1)
+e293: (p263, res_p)	(p254, bit0)
+e294: (p330, res_p)	(p254, bit1)	(p257, bit0)	(p533, bit0)
+e295: (p254, res_p)	(p262, bit0)	(p266, bit1)	(p269, bit0)
+e297: (p262, res_p)	(p256, bit0)
+e298: (p257, alu_res)	(p256, data1)
+e299: (p256, alu_res)	(r258, reg)
+e302: (i286, io2f_1)	(p262, bit1)	(p274, bit1)	(p315, bit1)	(p327, bit1)	(p383, bit1)	(p395, bit1)	(p533, bit2)	(m297, flush)	(m301, flush)	(m357, flush)	(m361, flush)	(m365, flush)	(m369, flush)
+e304: (p264, alu_res)	(p269, data0)	(p275, data1)
+e306: (p275, res_p)	(p266, bit0)
+e307: (p266, res_p)	(p274, bit0)
+e309: (p274, res_p)	(p268, bit0)
+e310: (p269, alu_res)	(p268, data1)
+e311: (p268, alu_res)	(r270, reg)
+e314: (p276, res_p)	(p445, bit0)	(p446, bit0)	(p447, bit0)
+e315: (p277, res_p)	(p449, bit0)	(p450, bit0)
+e316: (p278, res_p)	(p456, bit0)	(p457, bit0)
+e317: (p279, res_p)	(p461, bit0)	(p462, bit0)
+e318: (m479, data_out_0)	(I280, f2io_16)
+e319: (m471, data_out_0)	(I281, f2io_16)
+e320: (m475, data_out_0)	(I282, f2io_16)
+e321: (I283, io2f_16)	(r335, reg)	(m357, data_in_0)
+e322: (i285, io2f_1)	(p375, bit1)	(p378, bit0)	(p400, bit0)	(m357, wen_in_0)
+e326: (p296, res_p)	(m297, ren_in_0)
+e327: (m297, valid_out_0)	(m301, wen_in_0)
+e328: (p398, res_p)	(p307, bit1)	(p310, bit0)	(p332, bit0)	(m297, wen_in_0)
+e330: (p300, res_p)	(m301, ren_in_0)
+e331: (p303, res_p)	(p332, bit1)
+e332: (r311, reg)	(p303, data1)	(p305, data0)	(p310, data1)
+e333: (p304, res_p)	(p330, bit1)
+e334: (r323, reg)	(p304, data1)	(p317, data0)	(p322, data1)
+e336: (p305, alu_res)	(p310, data0)	(p316, data1)
+e338: (p316, res_p)	(p307, bit0)
+e339: (p307, res_p)	(p315, bit0)	(p319, bit1)	(p322, bit0)
+e341: (p315, res_p)	(p309, bit0)
+e342: (p310, alu_res)	(p309, data1)
+e343: (p309, alu_res)	(r311, reg)
+e347: (p317, alu_res)	(p322, data0)	(p328, data1)
+e349: (p328, res_p)	(p319, bit0)
+e350: (p319, res_p)	(p327, bit0)
+e352: (p327, res_p)	(p321, bit0)
+e353: (p322, alu_res)	(p321, data1)
+e354: (p321, alu_res)	(r323, reg)
+e358: (p332, res_p)	(p330, bit0)
+e362: (r335, reg)	(r336, reg)
+e363: (r336, reg)	(p520, data0)	(p526, data0)	(p527, data0)
+e365: (m357, data_out_0)	(m361, data_in_0)
+e369: (m361, data_out_0)	(p522, data1)	(p530, data1)	(p531, data1)	(r343, reg)	(m365, data_in_0)
+e370: (r343, reg)	(r344, reg)
+e371: (r344, reg)	(p524, data0)	(p525, data0)	(r345, reg)
+e372: (r345, reg)	(r346, reg)
+e373: (r346, reg)	(p522, data0)	(p530, data0)	(p531, data0)
+e374: (m365, data_out_0)	(m369, data_in_0)
+e378: (m369, data_out_0)	(r351, reg)
+e379: (r351, reg)	(r352, reg)
+e380: (r352, reg)	(p521, data0)	(p528, data0)	(p529, data0)
+e382: (p533, res_p)	(p532, bit0)
+e383: (p356, res_p)	(m357, ren_in_0)
+e384: (m357, valid_out_0)	(m361, wen_in_0)
+e385: (p532, res_p)	(i284, f2io_1)
+e386: (p360, res_p)	(m361, ren_in_0)
+e387: (m361, valid_out_0)	(m365, wen_in_0)
+e389: (p364, res_p)	(m365, ren_in_0)
+e390: (m365, valid_out_0)	(m369, wen_in_0)
+e392: (p368, res_p)	(m369, ren_in_0)
+e393: (p371, res_p)	(p400, bit1)
+e394: (r379, reg)	(p371, data1)	(p373, data0)	(p378, data1)
+e395: (p372, res_p)	(p398, bit1)
+e396: (r391, reg)	(p372, data1)	(p385, data0)	(p390, data1)
+e398: (p373, alu_res)	(p378, data0)	(p384, data1)
+e400: (p384, res_p)	(p375, bit0)
+e401: (p375, res_p)	(p383, bit0)	(p387, bit1)	(p390, bit0)
+e403: (p383, res_p)	(p377, bit0)
+e404: (p378, alu_res)	(p377, data1)
+e405: (p377, alu_res)	(r379, reg)
+e409: (p385, alu_res)	(p390, data0)	(p396, data1)
+e411: (p396, res_p)	(p387, bit0)
+e412: (p387, res_p)	(p395, bit0)
+e414: (p395, res_p)	(p389, bit0)
+e415: (p390, alu_res)	(p389, data1)
+e416: (p389, alu_res)	(r391, reg)
+e420: (p400, res_p)	(p398, bit0)
+e422: (p401, alu_res)	(p448, data0)
+e423: (p402, alu_res)	(p448, data1)
+e424: (p405, alu_res)	(p452, data0)
+e425: (p406, alu_res)	(p452, data1)
+e426: (p407, alu_res)	(p453, data1)
+e427: (p408, alu_res)	(p490, data1)
+e428: (p410, alu_res)	(p455, data0)
+e429: (p411, alu_res)	(p455, data1)
+e430: (p412, alu_res)	(p491, data1)
+e431: (p414, alu_res)	(p492, data1)
+e432: (p415, alu_res)	(p493, data1)
+e433: (p416, alu_res)	(p458, data0)
+e434: (p417, alu_res)	(p458, data1)
+e435: (p418, alu_res)	(p459, data0)
+e436: (p419, alu_res)	(p459, data1)
+e437: (p422, alu_res)	(p463, data0)
+e438: (p423, alu_res)	(p463, data1)
+e439: (p424, alu_res)	(p464, data0)
+e440: (p425, alu_res)	(p464, data1)
+e441: (p426, alu_res)	(p465, data0)	(p466, data0)
+e442: (p427, alu_res)	(p494, data1)
+e443: (p429, alu_res)	(p468, data0)
+e444: (p430, alu_res)	(p468, data1)
+e445: (p431, alu_res)	(p495, data1)
+e446: (p433, alu_res)	(p466, data1)
+e447: (p434, alu_res)	(p496, data1)
+e448: (p435, alu_res)	(p497, data1)
+e449: (p447, alu_res)	(p436, data0)	(p441, data0)	(p442, data0)
+e450: (p445, alu_res)	(p437, data0)	(p440, data0)	(p444, data0)
+e451: (p446, alu_res)	(p438, data0)	(p439, data0)	(p443, data0)
+e452: (p438, alu_res)	(p498, data1)
+e453: (p439, alu_res)	(p499, data0)
+e454: (p440, alu_res)	(p499, data1)
+e455: (p441, alu_res)	(p500, data1)
+e456: (p442, alu_res)	(p501, data0)
+e457: (p443, alu_res)	(p501, data1)
+e458: (p444, alu_res)	(p502, data1)
+e459: (p449, alu_res)	(p445, data0)
+e460: (p450, alu_res)	(p445, data1)
+e461: (p456, alu_res)	(p446, data0)
+e462: (p457, alu_res)	(p446, data1)
+e463: (p462, alu_res)	(p447, data0)
+e464: (p461, alu_res)	(p447, data1)
+e465: (p506, res_p)	(p448, bit0)
+e466: (p490, alu_res)	(p449, data0)
+e467: (p454, alu_res)	(p450, data0)
+e468: (p493, alu_res)	(p450, data1)
+e469: (p507, res_p)	(p451, bit0)
+e470: (p508, res_p)	(p452, bit0)
+e471: (p509, res_p)	(p453, bit0)
+e472: (p510, res_p)	(p454, bit0)
+e473: (p491, alu_res)	(p454, data0)
+e474: (p492, alu_res)	(p454, data1)
+e475: (p511, res_p)	(p455, bit0)
+e476: (p458, alu_res)	(p456, data1)
+e477: (p459, alu_res)	(p457, data0)
+e478: (p512, res_p)	(p458, bit0)
+e479: (p513, res_p)	(p459, bit0)
+e480: (p514, res_p)	(p460, bit0)
+e481: (p497, alu_res)	(p461, data1)
+e482: (p494, alu_res)	(p462, data0)
+e483: (p467, alu_res)	(p462, data1)
+e484: (p515, res_p)	(p463, bit0)
+e485: (p516, res_p)	(p464, bit0)
+e486: (p517, res_p)	(p465, bit0)	(p466, bit0)
+e487: (p518, res_p)	(p467, bit0)
+e488: (p495, alu_res)	(p467, data0)
+e489: (p496, alu_res)	(p467, data1)
+e490: (p519, res_p)	(p468, bit0)
+e491: (p482, alu_res)	(m471, addr_in_0)
+e492: (p472, res_p)	(m471, ren_in_0)
+e493: (p483, alu_res)	(m475, addr_in_0)
+e494: (p476, res_p)	(m475, ren_in_0)
+e495: (p481, alu_res)	(m479, addr_in_0)
+e496: (p480, res_p)	(m479, ren_in_0)
+e497: (p484, alu_res)	(p481, data0)
+e498: (p486, alu_res)	(p482, data0)
+e499: (p488, alu_res)	(p483, data0)
+e500: (p485, res_p)	(p484, bit0)
+e501: (p487, res_p)	(p486, bit0)
+e502: (p489, res_p)	(p488, bit0)
+e503: (p499, alu_res)	(p500, data0)
+e504: (p501, alu_res)	(p502, data0)
+e505: (p521, alu_res)	(p520, data1)
+e506: (p520, alu_res)	(p524, data1)	(p525, data1)
+e507: (p522, alu_res)	(p521, data1)
+e508: (p524, alu_res)	(p523, data0)
+e509: (p526, alu_res)	(p523, data1)
+e510: (p525, res_p)	(p524, bit0)
+e511: (p527, res_p)	(p526, bit0)
+e512: (p528, alu_res)	(p526, data1)	(p527, data1)
+e513: (p529, res_p)	(p528, bit0)
+e514: (p530, alu_res)	(p528, data1)	(p529, data1)
+e515: (p531, res_p)	(p530, bit0)
+
+ID to Names:
+p0: absd_417_418_419$abs$abs
+p1: absd_417_418_419$sub$binop
+p2: absd_417_420_421$abs$abs
+p3: absd_417_420_421$sub$binop
+p4: absd_417_435_439$abs$abs
+p5: absd_417_435_439$sub$binop
+p6: absd_417_437_440$abs$abs
+p7: absd_417_437_440$sub$binop
+p8: absd_435_417_458$abs$abs
+p9: absd_435_417_458$sub$binop
+p10: absd_435_459_460$abs$abs
+p11: absd_435_459_460$sub$binop
+p12: absd_437_417_449$abs$abs
+p13: absd_437_417_449$sub$binop
+p14: absd_437_435_474$abs$abs
+p15: absd_437_435_474$sub$binop
+p16: absd_437_447_448$abs$abs
+p17: absd_437_447_448$sub$binop
+p18: absd_472_417_473$abs$abs
+p19: absd_472_417_473$sub$binop
+p20: absd_472_435_481$abs$abs
+p21: absd_472_435_481$sub$binop
+p22: absd_472_437_480$abs$abs
+p23: absd_472_437_480$sub$binop
+p24: absd_514_515_516$abs$abs
+p25: absd_514_515_516$sub$binop
+p26: absd_514_517_518$abs$abs
+p27: absd_514_517_518$sub$binop
+p28: absd_514_529_530$abs$abs
+p29: absd_514_529_530$sub$binop
+p30: absd_514_531_532$abs$abs
+p31: absd_514_531_532$sub$binop
+p32: absd_543_544_548$abs$abs
+p33: absd_543_544_548$sub$binop
+p34: absd_543_546_549$abs$abs
+p35: absd_543_546_549$sub$binop
+p36: absd_543_561_562$abs$abs
+p37: absd_543_561_562$sub$binop
+p38: absd_543_563_564$abs$abs
+p39: absd_543_563_564$sub$binop
+p40: absd_544_543_573$abs$abs
+p41: absd_544_543_573$sub$binop
+p42: absd_544_574_575$abs$abs
+p43: absd_544_574_575$sub$binop
+p44: absd_546_543_586$abs$abs
+p45: absd_546_543_586$sub$binop
+p46: absd_546_544_599$abs$abs
+p47: absd_546_544_599$sub$binop
+p48: absd_546_584_585$abs$abs
+p49: absd_546_584_585$sub$binop
+p50: absd_597_543_598$abs$abs
+p51: absd_597_543_598$sub$binop
+p52: absd_597_544_606$abs$abs
+p53: absd_597_544_606$sub$binop
+p54: absd_597_546_605$abs$abs
+p55: absd_597_546_605$sub$binop
+p56: add_340_20_412$binop
+p57: add_417_418_423$binop
+p58: add_417_420_427$binop
+p59: add_417_435_436$binop
+p60: add_417_437_438$binop
+p61: add_417_443_466$binop
+p62: add_417_445_503$binop
+p63: add_417_472_476$binop
+p64: add_423_424_425$binop
+p65: add_427_424_428$binop
+p66: add_430_457_504$binop
+p67: add_430_465_467$binop
+p68: add_435_459_462$binop
+p69: add_435_472_486$binop
+p70: add_436_424_442$binop
+p71: add_437_417_454$binop
+p72: add_437_435_494$binop
+p73: add_437_447_451$binop
+p74: add_437_472_483$binop
+p75: add_438_424_444$binop
+p76: add_451_424_452$binop
+p77: add_454_424_455$binop
+p78: add_457_465_498$binop
+p79: add_462_424_463$binop
+p80: add_467_424_468$binop
+p81: add_476_424_477$binop
+p82: add_478_446_479$binop
+p83: add_483_424_484$binop
+p84: add_486_424_487$binop
+p85: add_489_430_490$binop
+p86: add_490_424_491$binop
+p87: add_494_424_495$binop
+p88: add_496_446_497$binop
+p89: add_498_424_499$binop
+p90: add_504_424_505$binop
+p91: add_514_515_520$binop
+p92: add_514_517_524$binop
+p93: add_514_529_534$binop
+p94: add_514_531_537$binop
+p95: add_520_521_522$binop
+p96: add_524_521_525$binop
+p97: add_534_521_535$binop
+p98: add_537_521_538$binop
+p99: add_543_544_545$binop
+p100: add_543_546_547$binop
+p101: add_543_553_633$binop
+p102: add_543_555_589$binop
+p103: add_543_561_566$binop
+p104: add_543_563_569$binop
+p105: add_544_543_577$binop
+p106: add_544_574_580$binop
+p107: add_545_551_552$binop
+p108: add_546_543_623$binop
+p109: add_546_544_619$binop
+p110: add_546_584_588$binop
+p111: add_546_597_608$binop
+p112: add_547_551_554$binop
+p113: add_566_551_567$binop
+p114: add_569_551_570$binop
+p115: add_572_583_634$binop
+p116: add_577_551_578$binop
+p117: add_580_551_581$binop
+p118: add_588_551_590$binop
+p119: add_592_572_593$binop
+p120: add_593_551_594$binop
+p121: add_597_543_601$binop
+p122: add_597_544_611$binop
+p123: add_601_551_602$binop
+p124: add_603_556_604$binop
+p125: add_608_551_609$binop
+p126: add_611_551_612$binop
+p127: add_614_572_615$binop
+p128: add_615_551_616$binop
+p129: add_619_551_620$binop
+p130: add_621_556_622$binop
+p131: add_623_551_624$binop
+p132: add_626_583_627$binop
+p133: add_627_551_628$binop
+p134: add_634_551_635$binop
+p135: add_642_645_646$binop
+p136: add_650-3900_651$binop
+p137: add_671-2541_672$binop
+p138: add_692-2008_693$binop
+p139: add_demosaicked_x___scan_dim_0_412_431$binop
+p140: add_demosaicked_x___scan_dim_0_412_510$binop
+p141: add_demosaicked_x___scan_dim_0_412_557$binop
+p142: add_demosaicked_y___scan_dim_1_338_413$binop
+p143: and_413_414_415$binop
+p144: and_431_432_433$binop
+p145: and_510_511_512$binop
+p146: and_557_558_559$binop
+p147: ashr_651_652_653$binop
+p148: ashr_672_673_674$binop
+p149: ashr_693_694_695$binop
+p252: count__demosaicked_x___scan_dim_0$add$binop
+p254: count__demosaicked_x___scan_dim_0$and$lut$lut
+p256: count__demosaicked_x___scan_dim_0$count$clrMux$mux
+p257: count__demosaicked_x___scan_dim_0$count$enMux$mux
+r258: count__demosaicked_x___scan_dim_0$count$reg0
+p262: count__demosaicked_x___scan_dim_0$resetOr$lut$lut
+p263: count__demosaicked_x___scan_dim_0$ult$compop
+p264: count__demosaicked_y___scan_dim_1$add$binop
+p266: count__demosaicked_y___scan_dim_1$and$lut$lut
+p268: count__demosaicked_y___scan_dim_1$count$clrMux$mux
+p269: count__demosaicked_y___scan_dim_1$count$enMux$mux
+r270: count__demosaicked_y___scan_dim_1$count$reg0
+p274: count__demosaicked_y___scan_dim_1$resetOr$lut$lut
+p275: count__demosaicked_y___scan_dim_1$ult$compop
+p276: eq_4150_416$compop
+p277: eq_4330_434$compop
+p278: eq_5120_513$compop
+p279: eq_5590_560$compop
+I280: io16_out_0_0_0
+I281: io16_out_0_0_1
+I282: io16_out_0_0_2
+I283: io16in_in_arg_3_0_0
+i284: io1_valid
+i285: io1in_in_en
+i286: io1in_reset
+r289: lb_denoised_stencil_update_stream$lb_recurse$lb1d_0$reg_1
+r290: lb_denoised_stencil_update_stream$lb_recurse$lb1d_0$reg_2
+r291: lb_denoised_stencil_update_stream$lb_recurse$lb1d_1$reg_1
+r292: lb_denoised_stencil_update_stream$lb_recurse$lb1d_1$reg_2
+r293: lb_denoised_stencil_update_stream$lb_recurse$lb1d_2$reg_1
+r294: lb_denoised_stencil_update_stream$lb_recurse$lb1d_2$reg_2
+p296: lb_denoised_stencil_update_stream$lb_recurse$lbmem_1_0$c1_lutcnst
+m297: lb_denoised_stencil_update_stream$lb_recurse$lbmem_1_0$cgramem
+p300: lb_denoised_stencil_update_stream$lb_recurse$lbmem_2_0$c1_lutcnst
+m301: lb_denoised_stencil_update_stream$lb_recurse$lbmem_2_0$cgramem
+p303: lb_denoised_stencil_update_stream$lb_recurse$valcompare_0$compop
+p304: lb_denoised_stencil_update_stream$lb_recurse$valcompare_1$compop
+p305: lb_denoised_stencil_update_stream$lb_recurse$valcounter_0$add$binop
+p307: lb_denoised_stencil_update_stream$lb_recurse$valcounter_0$and$lut$lut
+p309: lb_denoised_stencil_update_stream$lb_recurse$valcounter_0$count$clrMux$mux
+p310: lb_denoised_stencil_update_stream$lb_recurse$valcounter_0$count$enMux$mux
+r311: lb_denoised_stencil_update_stream$lb_recurse$valcounter_0$count$reg0
+p315: lb_denoised_stencil_update_stream$lb_recurse$valcounter_0$resetOr$lut$lut
+p316: lb_denoised_stencil_update_stream$lb_recurse$valcounter_0$ult$compop
+p317: lb_denoised_stencil_update_stream$lb_recurse$valcounter_1$add$binop
+p319: lb_denoised_stencil_update_stream$lb_recurse$valcounter_1$and$lut$lut
+p321: lb_denoised_stencil_update_stream$lb_recurse$valcounter_1$count$clrMux$mux
+p322: lb_denoised_stencil_update_stream$lb_recurse$valcounter_1$count$enMux$mux
+r323: lb_denoised_stencil_update_stream$lb_recurse$valcounter_1$count$reg0
+p327: lb_denoised_stencil_update_stream$lb_recurse$valcounter_1$resetOr$lut$lut
+p328: lb_denoised_stencil_update_stream$lb_recurse$valcounter_1$ult$compop
+p330: lb_denoised_stencil_update_stream$lb_recurse$valid_andr$_join$lut$lut
+p332: lb_denoised_stencil_update_stream$lb_recurse$valid_andr$opN_0$_join$lut$lut
+r335: lb_f0_stencil_update_stream$lb_recurse$lb1d_0$reg_1
+r336: lb_f0_stencil_update_stream$lb_recurse$lb1d_0$reg_2
+r343: lb_f0_stencil_update_stream$lb_recurse$lb1d_2$reg_1
+r344: lb_f0_stencil_update_stream$lb_recurse$lb1d_2$reg_2
+r345: lb_f0_stencil_update_stream$lb_recurse$lb1d_2$reg_3
+r346: lb_f0_stencil_update_stream$lb_recurse$lb1d_2$reg_4
+r351: lb_f0_stencil_update_stream$lb_recurse$lb1d_4$reg_1
+r352: lb_f0_stencil_update_stream$lb_recurse$lb1d_4$reg_2
+p356: lb_f0_stencil_update_stream$lb_recurse$lbmem_1_0$c1_lutcnst
+m357: lb_f0_stencil_update_stream$lb_recurse$lbmem_1_0$cgramem
+p360: lb_f0_stencil_update_stream$lb_recurse$lbmem_2_0$c1_lutcnst
+m361: lb_f0_stencil_update_stream$lb_recurse$lbmem_2_0$cgramem
+p364: lb_f0_stencil_update_stream$lb_recurse$lbmem_3_0$c1_lutcnst
+m365: lb_f0_stencil_update_stream$lb_recurse$lbmem_3_0$cgramem
+p368: lb_f0_stencil_update_stream$lb_recurse$lbmem_4_0$c1_lutcnst
+m369: lb_f0_stencil_update_stream$lb_recurse$lbmem_4_0$cgramem
+p371: lb_f0_stencil_update_stream$lb_recurse$valcompare_0$compop
+p372: lb_f0_stencil_update_stream$lb_recurse$valcompare_1$compop
+p373: lb_f0_stencil_update_stream$lb_recurse$valcounter_0$add$binop
+p375: lb_f0_stencil_update_stream$lb_recurse$valcounter_0$and$lut$lut
+p377: lb_f0_stencil_update_stream$lb_recurse$valcounter_0$count$clrMux$mux
+p378: lb_f0_stencil_update_stream$lb_recurse$valcounter_0$count$enMux$mux
+r379: lb_f0_stencil_update_stream$lb_recurse$valcounter_0$count$reg0
+p383: lb_f0_stencil_update_stream$lb_recurse$valcounter_0$resetOr$lut$lut
+p384: lb_f0_stencil_update_stream$lb_recurse$valcounter_0$ult$compop
+p385: lb_f0_stencil_update_stream$lb_recurse$valcounter_1$add$binop
+p387: lb_f0_stencil_update_stream$lb_recurse$valcounter_1$and$lut$lut
+p389: lb_f0_stencil_update_stream$lb_recurse$valcounter_1$count$clrMux$mux
+p390: lb_f0_stencil_update_stream$lb_recurse$valcounter_1$count$enMux$mux
+r391: lb_f0_stencil_update_stream$lb_recurse$valcounter_1$count$reg0
+p395: lb_f0_stencil_update_stream$lb_recurse$valcounter_1$resetOr$lut$lut
+p396: lb_f0_stencil_update_stream$lb_recurse$valcounter_1$ult$compop
+p398: lb_f0_stencil_update_stream$lb_recurse$valid_andr$_join$lut$lut
+p400: lb_f0_stencil_update_stream$lb_recurse$valid_andr$opN_0$_join$lut$lut
+p401: lshr_425_424_426$binop
+p402: lshr_428_424_429$binop
+p403: lshr_442_424_443$binop
+p404: lshr_444_424_445$binop
+p405: lshr_452_424_453$binop
+p406: lshr_455_424_456$binop
+p407: lshr_463_424_464$binop
+p408: lshr_468_424_469$binop
+p409: lshr_477_424_478$binop
+p410: lshr_484_424_485$binop
+p411: lshr_487_424_488$binop
+p412: lshr_491_424_492$binop
+p413: lshr_495_424_496$binop
+p414: lshr_499_424_500$binop
+p415: lshr_505_424_506$binop
+p416: lshr_522_521_523$binop
+p417: lshr_525_521_526$binop
+p418: lshr_535_521_536$binop
+p419: lshr_538_521_539$binop
+p420: lshr_552_551_553$binop
+p421: lshr_554_551_555$binop
+p422: lshr_567_551_568$binop
+p423: lshr_570_551_571$binop
+p424: lshr_578_551_579$binop
+p425: lshr_581_551_582$binop
+p426: lshr_590_551_591$binop
+p427: lshr_594_551_595$binop
+p428: lshr_602_551_603$binop
+p429: lshr_609_551_610$binop
+p430: lshr_612_551_613$binop
+p431: lshr_616_551_617$binop
+p432: lshr_620_551_621$binop
+p433: lshr_624_551_625$binop
+p434: lshr_628_551_629$binop
+p435: lshr_635_551_636$binop
+p436: mul_64117_642$binop
+p437: mul_644200_645$binop
+p438: mul_64844_649$binop
+p439: mul_662159_663$binop
+p440: mul_66538_666$binop
+p441: mul_66921_670$binop
+p442: mul_683228_684$binop
+p443: mul_68673_687$binop
+p444: mul_6908_691$binop
+p445: mux_416_471_508$mux
+p446: mux_416_528_541$mux
+p447: mux_416_632_638$mux
+p448: mux_422_426_429$mux
+p449: mux_434_470_417$mux
+p450: mux_434_502_507$mux
+p451: mux_441_443_445$mux
+p452: mux_450_453_456$mux
+p453: mux_461_443_464$mux
+p454: mux_475_493_501$mux
+p455: mux_482_485_488$mux
+p456: mux_513_514_527$mux
+p457: mux_513_540_514$mux
+p458: mux_519_523_526$mux
+p459: mux_533_536_539$mux
+p460: mux_550_553_555$mux
+p461: mux_560_543_637$mux
+p462: mux_560_596_631$mux
+p463: mux_565_568_571$mux
+p464: mux_576_579_582$mux
+p465: mux_587_591_555$mux
+p466: mux_587_591_625$mux
+p467: mux_600_618_630$mux
+p468: mux_607_610_613$mux
+m471: rom__f26a0$1$cgramem
+p472: rom__f26a0$1_ren_lutcnst
+m475: rom__f26a0$2$cgramem
+p476: rom__f26a0$2_ren_lutcnst
+m479: rom__f26a0$cgramem
+p480: rom__f26a0_ren_lutcnst
+p481: smax_656_657_658$cgramax
+p482: smax_677_678_679$cgramax
+p483: smax_698_699_700$cgramax
+p484: smin_654_655_656$min_mux$mux
+p485: smin_654_655_656$scomp$compop
+p486: smin_675_676_677$min_mux$mux
+p487: smin_675_676_677$scomp$compop
+p488: smin_696_697_698$min_mux$mux
+p489: smin_696_697_698$scomp$compop
+p490: sub_466_469_470$binop
+p491: sub_479_492_493$binop
+p492: sub_497_500_501$binop
+p493: sub_503_506_507$binop
+p494: sub_589_595_596$binop
+p495: sub_604_617_618$binop
+p496: sub_622_629_630$binop
+p497: sub_633_636_637$binop
+p498: sub_646_649_650$binop
+p499: sub_663_666_667$binop
+p500: sub_667_670_671$binop
+p501: sub_684_687_688$binop
+p502: sub_688_691_692$binop
+p506: ult_419_421_422$compop
+p507: ult_439_440_441$compop
+p508: ult_448_449_450$compop
+p509: ult_458_460_461$compop
+p510: ult_473_474_475$compop
+p511: ult_480_481_482$compop
+p512: ult_516_518_519$compop
+p513: ult_530_532_533$compop
+p514: ult_548_549_550$compop
+p515: ult_562_564_565$compop
+p516: ult_573_575_576$compop
+p517: ult_585_586_587$compop
+p518: ult_598_599_600$compop
+p519: ult_605_606_607$compop
+p520: umax_400_405_406$cgramax
+p521: umax_401_404_405$cgramax
+p522: umax_402_403_404$cgramax
+p523: umax_407_410_411$cgramax
+p524: umin_399_406_407$min_mux$mux
+p525: umin_399_406_407$ucomp$compop
+p526: umin_400_409_410$min_mux$mux
+p527: umin_400_409_410$ucomp$compop
+p528: umin_401_408_409$min_mux$mux
+p529: umin_401_408_409$ucomp$compop
+p530: umin_402_403_408$min_mux$mux
+p531: umin_402_403_408$ucomp$compop
+p532: reg_valid_delay
+p533: reset_valid_reg
+
+Netlist Bus:
+e0: 16
+e1: 16
+e2: 16
+e3: 16
+e4: 16
+e5: 16
+e6: 16
+e7: 16
+e8: 16
+e9: 16
+e10: 16
+e11: 16
+e12: 16
+e13: 16
+e14: 16
+e15: 16
+e16: 16
+e17: 16
+e18: 16
+e19: 16
+e20: 16
+e21: 16
+e22: 16
+e23: 16
+e24: 16
+e25: 16
+e26: 16
+e27: 16
+e28: 16
+e29: 16
+e30: 16
+e31: 16
+e32: 16
+e33: 16
+e34: 16
+e35: 16
+e36: 16
+e37: 16
+e38: 16
+e39: 16
+e40: 16
+e41: 16
+e42: 16
+e43: 16
+e44: 16
+e45: 16
+e46: 16
+e47: 16
+e48: 16
+e49: 16
+e50: 16
+e51: 16
+e52: 16
+e53: 16
+e54: 16
+e55: 16
+e56: 16
+e57: 16
+e58: 16
+e59: 16
+e60: 16
+e61: 16
+e62: 16
+e63: 16
+e64: 16
+e67: 16
+e68: 16
+e69: 16
+e70: 16
+e71: 16
+e72: 16
+e73: 16
+e74: 16
+e75: 16
+e76: 16
+e78: 16
+e80: 16
+e81: 16
+e82: 16
+e83: 16
+e84: 16
+e85: 16
+e86: 16
+e87: 16
+e89: 16
+e90: 16
+e91: 16
+e92: 16
+e93: 16
+e95: 16
+e97: 16
+e99: 16
+e100: 16
+e102: 16
+e104: 16
+e106: 16
+e107: 16
+e108: 16
+e109: 16
+e111: 16
+e113: 16
+e114: 16
+e115: 16
+e117: 16
+e119: 16
+e120: 16
+e121: 16
+e123: 16
+e125: 16
+e126: 16
+e127: 16
+e128: 16
+e129: 16
+e131: 16
+e133: 16
+e135: 16
+e137: 16
+e138: 16
+e139: 16
+e140: 16
+e141: 16
+e142: 16
+e143: 16
+e144: 16
+e145: 16
+e146: 16
+e147: 16
+e149: 16
+e150: 16
+e151: 16
+e152: 16
+e153: 16
+e155: 16
+e157: 16
+e159: 16
+e160: 16
+e161: 16
+e162: 16
+e164: 16
+e166: 16
+e168: 16
+e169: 16
+e170: 16
+e172: 16
+e173: 16
+e174: 16
+e176: 16
+e177: 16
+e178: 16
+e179: 16
+e181: 16
+e183: 16
+e184: 16
+e185: 16
+e187: 16
+e189: 16
+e190: 16
+e191: 16
+e193: 16
+e194: 16
+e195: 16
+e197: 16
+e199: 16
+e200: 16
+e201: 16
+e202: 16
+e203: 16
+e205: 16
+e206: 16
+e208: 16
+e209: 16
+e211: 16
+e212: 16
+e213: 16
+e214: 16
+e215: 16
+e216: 16
+e218: 16
+e220: 16
+e222: 16
+e224: 16
+e226: 16
+e228: 16
+e230: 16
+e232: 16
+e291: 16
+e293: 1
+e294: 1
+e295: 1
+e297: 1
+e298: 16
+e299: 16
+e302: 1
+e304: 16
+e306: 1
+e307: 1
+e309: 1
+e310: 16
+e311: 16
+e314: 1
+e315: 1
+e316: 1
+e317: 1
+e318: 16
+e319: 16
+e320: 16
+e321: 16
+e322: 1
+e326: 1
+e327: 1
+e328: 1
+e330: 1
+e331: 1
+e332: 16
+e333: 1
+e334: 16
+e336: 16
+e338: 1
+e339: 1
+e341: 1
+e342: 16
+e343: 16
+e347: 16
+e349: 1
+e350: 1
+e352: 1
+e353: 16
+e354: 16
+e358: 1
+e362: 16
+e363: 16
+e365: 16
+e369: 16
+e370: 16
+e371: 16
+e372: 16
+e373: 16
+e374: 16
+e378: 16
+e379: 16
+e380: 16
+e383: 1
+e384: 1
+e386: 1
+e387: 1
+e389: 1
+e390: 1
+e392: 1
+e393: 1
+e394: 16
+e395: 1
+e396: 16
+e398: 16
+e400: 1
+e401: 1
+e403: 1
+e404: 16
+e405: 16
+e409: 16
+e411: 1
+e412: 1
+e414: 1
+e415: 16
+e416: 16
+e420: 1
+e422: 16
+e423: 16
+e424: 16
+e425: 16
+e426: 16
+e427: 16
+e428: 16
+e429: 16
+e430: 16
+e431: 16
+e432: 16
+e433: 16
+e434: 16
+e435: 16
+e436: 16
+e437: 16
+e438: 16
+e439: 16
+e440: 16
+e441: 16
+e442: 16
+e443: 16
+e444: 16
+e445: 16
+e446: 16
+e447: 16
+e448: 16
+e449: 16
+e450: 16
+e451: 16
+e452: 16
+e453: 16
+e454: 16
+e455: 16
+e456: 16
+e457: 16
+e458: 16
+e459: 16
+e460: 16
+e461: 16
+e462: 16
+e463: 16
+e464: 16
+e465: 1
+e466: 16
+e467: 16
+e468: 16
+e469: 1
+e470: 1
+e471: 1
+e472: 1
+e473: 16
+e474: 16
+e475: 1
+e476: 16
+e477: 16
+e478: 1
+e479: 1
+e480: 1
+e481: 16
+e482: 16
+e483: 16
+e484: 1
+e485: 1
+e486: 1
+e487: 1
+e488: 16
+e489: 16
+e490: 1
+e491: 16
+e492: 1
+e493: 16
+e494: 1
+e495: 16
+e496: 1
+e497: 16
+e498: 16
+e499: 16
+e500: 1
+e501: 1
+e502: 1
+e503: 16
+e504: 16
+e505: 16
+e506: 16
+e507: 16
+e508: 16
+e509: 16
+e510: 1
+e511: 1
+e512: 16
+e513: 1
+e514: 16
+e515: 1
+e382: 1
+e385: 1
